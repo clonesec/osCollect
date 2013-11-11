@@ -1,0 +1,86 @@
+total: <%=debug @total%>
+<hr>
+<%=debug @all_results%>
+
+<% chart = @chart # just to keep all show pages consistent %>
+<h3>
+  <%= link_to 'chart:', charts_path(id: chart.id), class: 'btn btn-primary btn-mini', title: 'edit chart', style: "margin-top:-5px" %>
+  <%=chart.name%>
+</h3>
+<%
+source_field = DataSourceField.find(chart.group_by).name
+result = []
+if chart.chart_library == 'flotr2' && ['tablechart', 'table'].include?(chart.chart_type.downcase)
+	# ignore
+else
+	result << [escape_javascript(chart.chart_title), 'count']
+end
+merge_groupby_counts = Hash.new(0)
+@all_results.group_by_results.each do |groupby_count|
+  merge_groupby_counts[escape_javascript(groupby_count[1])] += groupby_count[2]
+end
+if source_field.downcase == 'timestamp'
+	# don't sort timestamped data by value but by key, i.e. date/time ascending:
+	# assuming the key's format is "YYYY/MM/DD HH:MM:SS Day" so it is sortable:
+	merge_groupby_counts = merge_groupby_counts.sort_by {|k,v| k}
+else
+	# sort by value(count) descending:
+	merge_groupby_counts = merge_groupby_counts.sort_by {|k,v| v}.reverse
+end
+result += merge_groupby_counts.collect { |key, value| [key, value] }
+count = @all_results.group_by_total
+if chart.chart_library == 'gchart'
+	chart_results = (count <= 0) ? '[]' : raw(result)
+else
+	chart_results = (count <= 0) ? '[]' : result
+end
+%>
+<% if @all_results.group_by_total <= 0 %>
+    <div class="alert alert-error">
+      <h5>no results found for this chart</h5>
+    </div>
+<% else %>
+		<% if chart.chart_library == 'gchart' %>
+		    <%= render 'gchart',
+		          update_chart_url:       update_chart_json_serialized_path,
+		          chart_json_serialized:  raw(chart.chart_json_serialized),
+		          chart_type:             chart.chart_type,
+		          chart_title:            chart.chart_title,
+							# chart names may have spaces, so do this:
+		          chart_div_name:         "#{chart.id}_#{chart.user_id}_#{chart.search_id}",
+		          source_name:            DataSourceField.find(chart.group_by).data_source.name,
+		          source_field:           source_field,
+		          chart_results:          chart_results
+		    %>
+		<% else
+				partial_page = nil
+				case
+				when ['piechart', 'pie'].include?(chart.chart_type.downcase)
+					partial_page = 'flotr2/pie'
+				when ['columnchart', 'column'].include?(chart.chart_type.downcase)
+					partial_page = 'flotr2/column'
+				when ['barchart', 'bar'].include?(chart.chart_type.downcase)
+					partial_page = 'flotr2/bar'
+				when ['linechart', 'line'].include?(chart.chart_type.downcase)
+					partial_page = 'flotr2/line'
+				when ['tablechart', 'table'].include?(chart.chart_type.downcase)
+					partial_page = 'flotr2/table'
+				else %>
+			    <div class="alert alert-info">
+			      <h5>The chart type of "<em><%= chart.chart_type.downcase %></em>" is unknown to Flotr2, please contact an admin.</h5>
+			    </div>
+				<% end %>
+				<% unless partial_page.blank? %>
+    				<%= render partial_page,
+								chart: 						chart,
+								chart_results: 		chart_results,
+								chart_div_name: 	"#{chart.id}_#{chart.user_id}_#{chart.search_id}",
+								chart_is_widget: 	false,
+								chart_width: 			'800px',
+								chart_height: 		'600px',
+								source_name: 			DataSourceField.find(chart.group_by).data_source.name,
+								source_field: 		DataSourceField.find(chart.group_by).name
+						%>
+				<% end %>
+		<% end %>
+<% end %>

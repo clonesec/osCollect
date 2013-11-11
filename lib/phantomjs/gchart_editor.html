@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Google Chart Editor
+  </title>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1.0', {packages: ['charteditor']});
+  </script>
+  <script type="text/javascript">
+    google.setOnLoadCallback(loadEditor);
+    var wrapper = null;
+    var chartEditor = null;
+    function loadEditor() {
+      // create the sample chart to edit:
+      wrapper = new google.visualization.ChartWrapper({
+         'chartType':'LineChart',
+         'dataSourceUrl':'http://spreadsheets.google.com/tq?key=pCQbetd-CptGXxxQIG7VFIQ&pub=1',
+         'query':'SELECT A,D WHERE D > 100 ORDER BY D',
+         'options': {'title':'Population Density (people/km^2)', 'legend':'none'}
+      });
+      // wrapper = new google.visualization.ChartWrapper({
+      //   chartType: 'PieChart',
+      //   containerId: 'vis_div',
+      //   dataSourceUrl: 'http://spreadsheets.google.com/tq?key=pCQbetd-CptGXxxQIG7VFIQ&pub=1',
+      //   query : 'SELECT A,D WHERE D > 100 ORDER BY D'
+      // });
+      chartEditor = new google.visualization.ChartEditor();
+      google.visualization.events.addListener(chartEditor, 'ok', redrawChart);
+      chartEditor.openDialog(wrapper, {});
+    }
+    // when user clicks "OK" this saves the chart to a <div> on the page ...
+    // also, the variable 'serializedJsonChartWrapper' can be saved to the database
+    // to be re-shown later ... i.e. user may want to save their chart customizations:
+    function redrawChart(){
+      chartEditor.getChartWrapper().draw(document.getElementById('vis_div'));
+      var serializedJsonChartWrapper = chartEditor.getChartWrapper().toJSON();
+      console.log(serializedJsonChartWrapper);
+      var clone = new google.visualization.ChartWrapper(serializedJsonChartWrapper);
+      clone.setOption('title', "The reuseable 'ChartWrapper.toJson()' serialized clone");
+      clone.draw(document.getElementById('tojson_clone'));
+    }
+  </script>
+</head>
+<body>
+<h3>Google Chart Editor</h3>
+<div id="vis_div" style="height: 400px; width: 600px;"></div>
+<hr />
+<div id="tojson_clone" style="height: 400px; width: 600px;"></div>
+</body>
+</html>

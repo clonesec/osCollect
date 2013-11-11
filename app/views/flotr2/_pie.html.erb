@@ -1,0 +1,49 @@
+<div id="<%=chart_div_name%>" style="height:<%=chart_height%>; width:<%=chart_width%>;"></div>
+<% 	
+	label_data = [] 
+	chart_results.each do |result|
+	  label_data << "{label : #{"'"+result.value+"'"}, data : [[0, #{result.hits}]]}"
+	end
+	title = chart_is_widget ? 'null' : "'#{chart.chart_title}'"
+	show_legend = chart_is_widget ? 'false' : 'true'
+%>
+<script type='text/javascript'>
+$(document).ready(function() {
+	(function pie(container) {
+	  var graph = Flotr.draw(container, 
+		[<%= raw(label_data.join(",\n")) %>],
+		{
+			colors : ["#3366CC","#DC3912","#FF9900","#109618","#990099"],
+			title : <%= raw(title) %>,
+	    HtmlText : false,
+	    grid : {
+				outlineWidth : 0,
+	      verticalLines : false,
+	      horizontalLines : false
+	    },
+	    xaxis : { showLabels : false },
+	    yaxis : { showLabels : false },
+	    pie : {
+	      show : true,
+				shadowSize : 0,
+				fillOpacity : 1 // solid fill no gradient
+	    },
+	    mouse : {
+				fillOpacity : 0,
+				track : true,
+				trackDecimals : 0,
+				trackFormatter : function(obj){ return obj.series.label + " = " + obj.y.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); },
+	      position : 'ne'
+			},
+	    legend : {
+				show : <%= raw(show_legend) %>,
+				noColumns : 1,
+	      position : 'sw',
+	      backgroundColor : '#ffffff',
+				labelBoxBorderColor: '#ffffff', // cls: hides the grayish border
+				labelFormatter: function(v){ return v; }
+	    }
+	  });
+	})(document.getElementById("<%=chart_div_name%>"));
+});
+</script>

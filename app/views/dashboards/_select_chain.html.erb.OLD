@@ -1,0 +1,11 @@
+<% panel = f.object %>
+<fieldset class="item" style="margin-top:2px">
+  <div class="inline-inputs">
+    <%= f.select(:chart_id, options_for_select(Chart.list_charts(current_user), panel.chart_id), {}, class: "span8") %>
+    <button class="remove btn btn-mini" style="margin-top:-12px; text-decoration:none" title="remove this panel">
+      <i class="icon-remove"></i>
+    </button>
+  </div>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :_destroy %>
+</fieldset>

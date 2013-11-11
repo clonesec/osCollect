@@ -1,0 +1,47 @@
+<% if @error_message %>
+	<div class="alert alert-error">
+		<h3><%= @error_message%></h3>
+	</div>
+<% else %>
+	<% div_id = "total-logs-by-host-this-week" %>
+	<div id="total-logs-by-host-this-week">
+		<h3>
+			Total Logs by Host:&nbsp;&nbsp;
+			<small>
+				(
+					<%=number_with_delimiter(@host_counts.length)%> hosts
+					have sent
+					<%=number_with_delimiter(@total)%> logs
+				)
+			</small>
+		</h3>
+		<% if @host_counts.length <= 0 %>
+        <blockquote>
+          <p style="font-size:20px">
+            No data to display
+          </p>
+        </blockquote>
+		<% else %>
+				<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="log-totals-by-host">
+				  <thead>
+				    <th>host</th>
+				    <!-- <th>hostname</th> -->
+				    <th>count</th>
+				  </thead>
+				  <tbody>
+						<% @host_counts.each do |hc| %>
+							<%#
+							host = Host.find_by_host(host_ip_count.name)
+							host_name = host.blank? ? '' : host.hostname
+							%>
+							<tr>
+								<td><%= hc.value %></td>
+								<!-- <td><%#= host_name %></td> -->
+								<td style="text-align:right"><%= number_with_delimiter(hc.hits) %></td>
+							</tr>
+						<% end %>
+				  </tbody>
+				</table>
+		<% end %>
+	</div>
+<% end %>

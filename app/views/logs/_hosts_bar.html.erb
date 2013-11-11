@@ -1,0 +1,90 @@
+<!-- <script type="text/javascript" src="assets/d3.v2.min.js"></script> -->
+<style type="text/css">
+/*	body {
+	  font: 12px helvetica;
+	}
+*/
+	.bar rect {
+	  fill: darkseagreen;
+	}
+	.bar text.value {
+	  fill: white;
+	}
+	.axis {
+	  shape-rendering: crispEdges;
+	}
+	.axis path {
+	  fill: none;
+	}
+	.x.axis line {
+	  stroke: powderblue;
+	  stroke-opacity: .8;
+	}
+	.y.axis path {
+	  stroke: greenyellow;
+	}
+</style>
+<script type="text/javascript">
+	var data = JSON.parse('<%=data%>');
+	var maxWidth = 1170;
+	var maxHeight = 400;
+	if (data.length <= 30) {
+		maxHeight = 400;
+	} else if (data.length >= 31 && data.length <= 126) {
+		maxHeight = 2500;
+	} else {
+		maxHeight = 4000; // crazy big
+	}
+	// console.log(data.length);
+	// console.log(maxHeight);
+	var margin = {top: 30, right: 10, bottom: 10, left: 30},
+	    width = maxWidth - margin.right - margin.left,
+	    height = maxHeight - margin.top - margin.bottom;
+	var format = d3.format(",.0f");
+	var x = d3.scale.linear().range([0, width]);
+	var y = d3.scale.ordinal().domain(data).rangeRoundBands([0, height], .1);
+
+	var xAxis = d3.svg.axis()
+	    .scale(x)
+	    .orient("top")
+			.tickFormat(d3.format(",s"))
+	    .tickSize(-height);
+
+	var yAxis = d3.svg.axis()
+	    .scale(y)
+	    .orient("right")
+	    .tickSize(0);
+
+	var svg = d3.select("#<%=div_id%>").append("svg")
+	    .attr("width", width + margin.right + margin.left)
+	    .attr("height", height + margin.top + margin.bottom)
+	  .append("g")
+	    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+	// Parse numbers, and sort by value.
+	data.forEach(function(d) { d.value = +d.value; });
+	data.sort(function(a, b) { return b.value - a.value; });
+
+	// Set the scale domain.
+	// cls: add some extra for x axis:
+	x.domain([0, d3.max(data, function(d) { return d.value; })]);
+	y.domain(data.map(function(d) { return d.name; }));
+
+	var bar = svg.selectAll("g.bar")
+	    .data(data)
+	  .enter().append("g")
+	    .attr("class", "bar")
+	    .attr("transform", function(d) { return "translate(0," + y(d.name) + ")"; });
+
+	bar.append("rect")
+	    .attr("width", function(d) { return x(d.value); })
+	    .attr("height", y.rangeBand());
+
+	svg.append("g")
+	    .attr("class", "x axis")
+	    .call(xAxis);
+
+	svg.append("g")
+	    .attr("class", "y axis")
+	    .call(yAxis);
+</script>

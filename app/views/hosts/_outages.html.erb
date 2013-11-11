@@ -1,0 +1,25 @@
+<table class="table table-striped">
+  <thead>
+    <th>job type</th>
+    <th>time period</th>
+  </thead>
+  <tbody>
+    <% @history.each do |history| %>
+      <tr>
+				<td><%= history.history_type %></td>
+				<td>
+					<% if history.history_type == 'weekly' %>
+						<%= history.start_time.utc.strftime("%A, %b %-d, %Y")%> 
+						&nbsp;-&nbsp; 
+						<%= history.end_time.utc.strftime("%A, %b %-d, %Y")%>
+						&nbsp;&nbsp; 
+						year: <%= history.year %> &nbsp;week: <%= history.week %>
+			    <% else %>
+						<%= history.start_time.utc.strftime("%A, %b %-d, %Y")%> 
+			    <% end %>
+				</td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+<%= will_paginate @history, inner_window: 2, style: 'font-size:small' %>

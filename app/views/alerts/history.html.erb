@@ -1,0 +1,23 @@
+<h2>Alert history for:<br /><%= @alert.name %></h2>
+<table class="table table-striped">
+	<thead>
+		<th>Time Range</th>
+		<th>Matches</th>
+		<th>Elapsed seconds</th>
+	</thead>
+	<tbody>
+	<% @history.each do |event| %>
+			<tr>
+				<td>
+					<%= Time.at(event.start_time).utc.strftime("%a, %b %-d, %Y %H:%M:%S") %>
+					&nbsp;-&nbsp;
+					<%= Time.at(event.end_time).utc.strftime("%a, %b %-d, %Y %H:%M:%S") %>
+				</td>
+				<td><%= event.matches %></td>
+				<td><%= event.elapsed_time %></td>
+			</tr>
+	<% end %>
+	</tbody>
+</table>
+<hr />
+<em style="padding-left:30px; color:e0e0e0">note: only a few days of history are available for viewing.</em>

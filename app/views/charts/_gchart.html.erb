@@ -1,0 +1,94 @@
+<div class="alert" style="height:350px">
+  <button id="chart_editor" class="btn btn-mini" style="margin-bottom:5px; text-decoration:none" title="edit chart">
+  gchart editor
+  </button>
+  <div id='<%=chart_div_name%>' style="height:300px"></div>
+</div>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<script type="text/javascript">google.load('visualization', '1.1', {packages: ['charteditor']});</script>
+<script type='text/javascript'>
+$(document).ready(function() {
+  google.setOnLoadCallback(loadEditor);
+  var noChartErrors = true;
+  var chartEditor = null;
+  var wrapper = null;
+  var chart_type = "<%=chart_type.blank? ? 'Table' : chart_type%>";
+  var chart_json_serialized = <%=chart_json_serialized.blank? ? 'null' : chart_json_serialized%>;
+  if ( (chart_json_serialized == null) || (typeof chart_json_serialized === 'undefined') ) {
+    var chartOptions = {
+      title: '<%=escape_javascript(chart_title)%>',
+      hAxis: {title: '<%=source_name%>.<%=source_field%>'},
+      is3D: false,
+      colors: ['teal','tomato','cornflowerblue','darkorange','green','blue','brown','red'],
+      chartArea: {width:'auto', height:'auto'},
+      sortColumn: 1, sortAscending: false, page: 'enable', pageSize: 10
+    };
+    wrapper = new google.visualization.ChartWrapper({
+      chartType: chart_type,
+      chartName: "NOTE: click 'OK' to save your changes.",
+      options: chartOptions,
+      containerId: '<%=chart_div_name%>'
+    });
+    }
+  else {
+    var chart_json_serialized = jQuery.parseJSON('<%=chart_json_serialized%>');
+    var chartOptions = {
+      options: {
+        title: '<%=escape_javascript(chart_title)%>',
+        hAxis: {title: '<%=source_name%>.<%=source_field%>'}
+      }
+    };
+    chart_json_serialized = jQuery.extend(chart_json_serialized, chartOptions);
+    var wrapper = new google.visualization.ChartWrapper(chart_json_serialized);
+    wrapper.setChartName("NOTE: click 'OK' to save your changes.");
+  }
+  google.visualization.events.addListener(wrapper, 'error', function errorHandler(e) {
+    noChartErrors = false;
+    console.log(noChartErrors);
+    console.log(e.id);
+    console.log(e.message);
+    alert(e.message);
+  });
+  var data = google.visualization.arrayToDataTable(<%=chart_results%>);
+  wrapper.setDataTable(data);
+  wrapper.draw(data);
+
+  function loadEditor() {
+    noChartErrors = true;
+    chartEditor = new google.visualization.ChartEditor();
+    google.visualization.events.addListener(chartEditor, 'ok', redrawChart);
+    chartEditor.openDialog(wrapper, {});
+  }
+
+  // when user clicks "OK" this displays the chart to a <div> on the page ...
+  // also, the variable 'serializedJsonChartWrapper' can be saved to the database
+  // to be re-shown later ... i.e. user may want to save their chart customizations:
+  function redrawChart(){
+    wrapper = chartEditor.getChartWrapper();
+    wrapper.draw();
+    var serializedJsonChartWrapper = wrapper.toJSON();
+    // clone the chart so we can remove the current data from the serialized json
+    // before posting via ajax for database storage:
+    var clone = new google.visualization.ChartWrapper(serializedJsonChartWrapper);
+    clone.setDataTable(null); // remove any existing data
+    clone.setChartName(null); // remove chartName as it's only used for custom charts
+    var serializedJsonChartWrapperWithNoData = clone.toJSON();
+    // now, post serializedJsonChartWrapperWithNoData via ajax for database storage:
+    if (noChartErrors) {
+      $.post(
+        "<%=update_chart_url%>",
+        { serialized_chart : serializedJsonChartWrapperWithNoData,
+          chart_title : clone.getOption('title'),
+          chart_type : clone.getChartType()
+        }
+      );
+    }
+    // console.log('serializedJsonChartWrapperWithNoData:');
+    // console.log(serializedJsonChartWrapperWithNoData);
+  }
+
+  $("#chart_editor").on("click", function(event) {
+    return loadEditor();
+  });
+});
+</script>

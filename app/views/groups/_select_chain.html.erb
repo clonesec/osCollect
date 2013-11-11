@@ -1,0 +1,25 @@
+<% group = f.object %>
+<% name_with_index = f.object_name %>
+<% match_index = /\[(\d+)\]/.match(name_with_index) %>
+<% fieldx = match_index.to_s.gsub("[",'').gsub("]",'').to_i + 1 %>
+<% if @group.fields_with_errors.include?(fieldx) %>
+    <fieldset class="item control-group error" style="margin-top:2px">
+<% else %>
+    <fieldset class="item" style="margin-top:2px">
+<% end %>
+  <div class="inline-inputs">
+    <%= f.text_field :ip_range_from, class: 'span2', placeholder: "exclude host IP begin" %>
+    &nbsp;&rarr;&nbsp;
+    <%= f.text_field :ip_range_to, class: 'span2', placeholder: "exclude host IP end" %>
+    <% if @group.fields_with_errors.include?(fieldx) %>
+        <button class="error btn btn-mini btn-danger disabled" disabled="disabled" style="text-decoration:none" title="there's an error with this excluded host IP">
+          #<%= fieldx %>
+        </button>
+    <% end %>
+    <button class="remove btn btn-mini" style="margin-bottom:5px; text-decoration:none" title="remove this excluded host IP">
+      <i class="icon-remove"></i>
+    </button>
+  </div>
+  <%= f.hidden_field :id %>
+  <%= f.hidden_field :_destroy %>
+</fieldset>

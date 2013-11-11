@@ -1,0 +1,89 @@
+<h2>Alerts</h2>
+<% unless @alerts.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @alerts %>
+  </span>
+  <br />
+  <table class="table table-striped">
+		<thead>
+			<th>Name</th>
+			<th>Active</th>
+			<th>Last Run</th>
+			<th>Search &amp; matching criteria</th>
+		</thead>
+    <tbody>
+      <% @alerts.each do |alert| %>
+        <tr>
+          <td>
+						<%
+						button_look = 'btn'
+						button_title = 'click to edit ... no status, because this alert is not active'
+						if alert.active
+							if alert.status == 'c'
+								button_look = 'btn btn-danger'
+								button_title = 'click to edit ... status is critical, matching logs were found during the last run'
+							else
+								button_look = 'btn btn-success'
+								button_title = 'click to edit ... status is normal, no matching logs found during the last run'
+							end
+						end
+						%>
+	          <%= link_to alert.name, edit_alert_path(alert), class: button_look, title: button_title, style: "text-align:left" %>
+						<br />
+	          <%= link_to "history", alerts_history_path(alert), class: 'btn btn-info btn-mini', style: "margin-top:10px; margin-left:20px" %>
+          </td>
+          <td><%= alert.active ? "Yes" : "No" %></td>
+          <td>
+						<% if alert.last_run > 0 %>
+								 <%= Time.at(alert.last_run).utc.strftime("%a, %b %-d, %Y %H:%M:%S") %>
+								 <br />
+								 <%= "matches: #{number_with_delimiter(alert.last_total_matches)}" %>
+						<% else %>
+								 none
+						<% end %>
+					</td>
+          <td>
+						<%= alert.search.nil? ? raw("<strong>A search must to be selected for this alert to be runnable!</strong>") : alert.search.name %>
+						<%
+				    if alert.threshold_operator == 'gt'
+				      operator = 'greater than'
+				    else
+				      operator = 'less than'
+				    end
+				    threshold_time = alert.threshold_time_seconds / 60
+						%>
+						<br />
+						threshold is <%=operator%> <%=alert.threshold_count%> matching logs in <%=threshold_time%> minutes
+						<% if alert.last_run > 0 %>
+								<br />
+								time range:
+								<br />
+								<blockquote><%=Time.at(alert.last_run - alert.threshold_time_seconds).utc.strftime("%a, %b %-d, %Y %H:%M:%S")%> - <%=Time.at(alert.last_run).utc.strftime("%a, %b %-d, %Y %H:%M:%S")%></blockquote>
+						<% end %>
+					</td>
+          <td width="6%">
+						<%# if Rails.env.development? %>
+								<% if alert.shared %>
+										<%= link_to 'unshare', share_path(id: alert.id, share_token: alert.shared, type: 'Alert'), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+										<br /><br />
+					      <% else %>
+										<%= button_to 'share', shares_path(id: alert.id, type: 'Alert'), class: "btn btn-success btn-mini share-alert" %>
+					      <% end %>
+			      <%# end %>
+						<%= link_to 'delete', alert_path(id: alert.id), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, class: 'btn btn-danger btn-mini' %>
+					</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @alerts, inner_window: 2, style: 'font-size:small' %>
+<% end %>
+<script type='text/javascript'>
+function refreshPage() {
+	window.location.reload();
+}
+
+$(document).ready(function() {
+	var int = setInterval(refreshPage, 260000);
+});
+</script>

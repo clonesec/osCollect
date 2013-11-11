@@ -1,0 +1,65 @@
+<div id="report">
+	<% if @report.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @report.errors.full_messages.each do |msg| %>
+	        <li><%= msg.gsub('ip', 'IP') %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @report, :html => { :class => 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend>Report</legend>
+      <div class="control-group">
+        <label class="control-label" for="input01">Name</label>
+        <div class="controls">
+          <%= f.text_field :name, class: 'span6' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Auto run at</label>
+        <div class="controls">
+          <%= f.select(:auto_run_at, options_for_select([['Never','Never'],['Daily (runs every day at 1am UTC to process yesterday)','Daily'],['Weekly (runs every Sunday at 2am UTC to process last week, i.e. the previous Sunday-Saturday)','Weekly']], @report.auto_run_at), {}, class: "span7") %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input02">Description</label>
+        <div class="controls">
+	        <%= f.text_area :description, rows: 5, class: 'span6' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input03">Chart sections</label>
+        <div class="controls" id="charts">
+          <button class="add btn btn-mini" style="margin-top:5px; margin-bottom:5px; text-decoration:none" title="add more sections">
+            <i class="icon-plus"></i>&nbsp;chart
+          </button>
+          <div class="items">
+            <%= f.nested_fields_for :report_charts do |f|
+                  render 'select_charts', f: f, charts: @charts
+            end -%>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input04">Search sections</label>
+        <div class="controls" id="searches">
+          <button class="add btn btn-mini" style="margin-top:5px; margin-bottom:5px; text-decoration:none" title="add more sections">
+            <i class="icon-plus"></i>&nbsp;search
+          </button>
+          <div class="items">
+            <%= f.nested_fields_for :report_searches do |f|
+                  render 'select_searches', f: f, searches: @searches
+            end -%>
+          </div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.submit nil, class: "btn btn-primary" %>
+        <%= link_to 'Cancel', reports_path, :class => 'btn' %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>

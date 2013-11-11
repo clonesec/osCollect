@@ -1,0 +1,95 @@
+<h2>Searches</h2>
+<% unless @searches.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @searches %>
+  </span>
+  <br />
+  <table class="table table-striped">
+    <thead>
+      <th>name</th>
+      <th>search</th>
+      <th>date</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% @searches.each do |search| %>
+        <tr>
+          <td width="30%"><%= link_to "#{search.name}", searches_path(id: search.id) %></td>
+          <td>
+            <div class="alert alert-success">
+              <h5>timestamp range:&nbsp;
+                <%= (search.date_from.blank? && search.date_to.blank?) ? '***nothing entered***' : "#{search.date_from} #{search.time_from} - #{search.date_to} #{search.time_to}" %>
+              </h5>
+              <h5>host IP range:&nbsp;
+                <%= (search.host_from.blank? && search.host_to.blank?) ? '***nothing entered***' : "#{search.host_from} - #{search.host_to}" %>
+              </h5>
+              <h5>log source types:</h5>
+              <blockquote>
+                <p style="font-size:12px">
+                  <%= search.sources.blank? ? '***nothing entered***' : search.source_ids_to_names.join(', ') %>
+                </p>
+              </blockquote>
+              <h5>search terms:</h5>
+              <blockquote>
+                <p style="font-size:12px">
+                  <%= search.query.blank? ? '***nothing entered***' : search.query %>
+                </p>
+              </blockquote>
+            </div>
+            <% if search.search_fields.blank? %>
+                <div class="alert" style="margin-top:-15px">
+                  <h5>+ fields:&nbsp;***nothing entered***</h5>
+                </div>
+            <% else %>
+                <div class="alert" style="margin-top:-15px">
+                  <h5>+ fields:</h5>
+                  <blockquote>
+            <% end %>
+            <% search.search_fields.each do |sf| %>
+                  <%  case sf.and_or
+                      when 'or'
+                        ao = "<em>or&nbsp;</em>"
+                      when 'and'
+                        ao = "<em>and</em>"
+                      else
+                        ao = ''
+                      end
+                  %>
+                  <p style="font-size:12px">
+                    <%= raw(ao) %>
+                    <%#= DataSource.find(sf.data_source_id).name unless sf.data_source_id.blank? %>.<%#= DataSourceField.find(sf.data_source_field_id).name unless sf.data_source_field_id.blank? %><%#= DataFieldOperator.find(sf.data_field_operator_id).operator unless sf.data_field_operator_id.blank? %><%#= sf.match_or_attribute_value %>
+                    <%= DataSource.find(sf.data_source_id).name unless sf.data_source_id.blank? %>.
+										<%= DataSourceField.find(sf.data_source_field_id).name unless sf.data_source_field_id.blank? %> = 
+										<%= sf.match_or_attribute_value %>
+                  </p>
+            <% end %>
+            <% unless search.search_fields.blank? %>
+                  </blockquote>
+                </div>
+            <% end %>
+          </td>
+          <td>
+						<%= search.updated_at.utc.strftime("%a, %b %d, %Y %H:%M:%S") %>
+						<% if search.origin %>
+								<br />
+								<small>
+									installed from share on:<br />
+									<%= search.created_at.utc.strftime("%a, %b %d, %Y %H:%M:%S") %>
+								</small>
+			      <% end %>
+					</td>
+          <td width="6%">
+						<% if search.shared %>
+								<%#= link_to 'unshare', share_path(id: search.id, share_token: search.shared, type: 'Search'), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+								<!-- <br /><br /> -->
+			      <% else %>
+								<%#= button_to 'share', shares_path(id: search.id, type: 'Search'), class: "btn btn-success btn-mini share-search" %>
+			      <% end %>
+						<%= link_to 'delete', search, data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+					</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @searches, inner_window: 2, style: 'font-size:small' %>
+<% end %>

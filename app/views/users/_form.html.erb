@@ -1,0 +1,86 @@
+<div id="user">
+	<% if @user.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @user.errors.full_messages.each do |msg| %>
+	        <li><%= msg %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @user, :html => { :class => 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend>User</legend>
+      <div class="control-group">
+        <label class="control-label" for="input01">Name</label>
+        <div class="controls">
+          <% if @user.username == 'admin' %>
+            <%= f.text_field :username, class: "input-xlarge disabled", disabled: '' %>
+            <p class="help-block">the user named <em>admin</em> is required and may not be changed</p>
+          <% else %>
+            <%= f.text_field :username, class: "input-xlarge", :autocomplete => "off" %>
+          <% end %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input02">Email</label>
+        <div class="controls">
+          <%= f.text_field :email, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input03">Password</label>
+        <div class="controls">
+          <%= f.password_field :password, class: "input-xlarge", :autocomplete => "off" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input04">Password Confirmation</label>
+        <div class="controls">
+          <%= f.password_field :password_confirmation, class: "input-xlarge", :autocomplete => "off" %>
+        </div>
+      </div>
+      <div class="control-group" style="margin-top:20px">
+        <label class="control-label">&nbsp;</label>
+        <div class="controls"><h4>Preferences</h4></div>
+      </div>
+    	<%#= f.hidden_field :send_weekly_log_counts %>
+      <!-- <div class="control-group">
+        <label class="control-label">Weekly Log Counts</label>
+        <div class="controls">
+					<div class="btn-group" id="userEmailWeeklyLogCounts">
+				    <input type="button" class="btn b1 <%#=@user.send_weekly_log_counts ? 'btn-success' : nil%>" value="Yes, email me">
+				    <input type="button" class="btn b0 <%#=@user.send_weekly_log_counts ? nil : 'btn-danger'%>"  value="No">
+					</div>
+        </div>
+      </div> -->
+      <div class="control-group">
+        <label class="control-label">Max search results</label>
+        <div class="controls">
+          <%= f.select(:max_search_results, options_for_select([[50,50],[100,100],[500,500],[1000,1000]], @user.max_search_results), {}, class: "span2") %>
+					&nbsp;&nbsp;<em>note: selecting more than 100 may cause a slow search/query response.</em>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Search results per page</label>
+        <div class="controls">
+          <%= f.select(:search_results_page_size, options_for_select([[10,10],[25,25],[50,50],[100,100]], @user.search_results_page_size), {include_blank: 'select page size'}, class: "span2") %>
+        </div>
+      </div>
+			<% unless @user.new_record? %>
+		      <div class="control-group">
+		        <label class="control-label">Default Dashboard</label>
+		        <div class="controls">
+		          <%= f.select(:search_id, options_for_select(Dashboard.list_dashboards(current_user), @user.search_id), {include_blank: 'select dashboard'}, class: "span4") %>
+							&nbsp;&nbsp;<em>displayed after login</em>
+		        </div>
+		      </div>
+			<% end %>
+      <div class="form-actions">
+        <%= f.submit nil, class: "btn btn-primary" %>
+        <%= link_to 'Cancel', users_path, :class => 'btn' %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>

@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Google Chart Editor
+  </title>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/1.8.1/jquery.min.js"></script>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+</head>
+<body>
+<h3>Google Chart Editor</h3>
+<input type="submit" value="chart editor" onClick="loadEditor()" style="font-size:18px;">
+<div id="chart_div" style="height: 400px; width: 600px;"></div>
+<hr />
+<div id="tojson_clone" style="height: 400px; width: 600px;"></div>
+<script type="text/javascript">
+  google.load('visualization', '1.1', {packages: ['charteditor']});
+</script>
+<script type="text/javascript">
+  google.setOnLoadCallback(loadEditor);
+  var wrapper = null;
+  var chartEditor = null;
+  // var jquery_version = $().jquery;
+  // console.log('jquery_version='+jquery_version);
+  // setup and draw the initial chart:
+  wrapper = new google.visualization.ChartWrapper({
+    // chartType: 'BarChart',
+    chartType: 'ColumnChart',
+    // chartType: 'LineChart',
+    // chartType: 'PieChart',
+    // dataTable: [["Eventids by Host", "count"], ["7035", 3], ["1202", 3]],
+    options: {
+      title: 'EventIDs',
+      is3D: false,
+      colors: ['teal','tomato','cornflowerblue','darkorange','green','blue','brown','red'],
+      chartArea: {width:'auto', height:'auto'}
+    },
+    containerId: 'chart_div'
+  });
+  var data = google.visualization.arrayToDataTable([["EventID", "count"], ["123", 23], ["10", 10], ["7035", 35], ["1202", 12]]);
+  // remove data before serializing:
+  // var data = google.visualization.arrayToDataTable([]);
+  wrapper.setDataTable(data);
+  wrapper.draw(data);
+
+  function loadEditor() {
+    chartEditor = new google.visualization.ChartEditor();
+    google.visualization.events.addListener(chartEditor, 'ok', redrawChart);
+    chartEditor.openDialog(wrapper, {});
+  }
+
+  // when user clicks "OK" this displays the chart to a <div> on the page ...
+  // also, the variable 'serializedJsonChartWrapper' can be saved to the database
+  // to be re-shown later ... i.e. user may want to save their chart customizations:
+  function redrawChart(){
+    console.log('>>> redrawChart:');
+    chartEditor.getChartWrapper().draw(document.getElementById('chart_div'));
+    var serializedJsonChartWrapper = chartEditor.getChartWrapper().toJSON();
+    console.log('serializedJsonChartWrapper:');
+    console.log(serializedJsonChartWrapper);
+    // clone the chart so we can remove the current data from the serialized json
+    // before posting via ajax for database storage:
+    var clone = new google.visualization.ChartWrapper(serializedJsonChartWrapper);
+    // var data = google.visualization.arrayToDataTable([["Spuds", "count"], ["potato", 1], ["potatoe", 2]]);
+    clone.setDataTable(null); // remove any existing data
+    var serializedJsonChartWrapperWithNoData = clone.toJSON();
+    // now, post serializedJsonChartWrapperWithNoData via ajax for database storage:
+    $.post("/update_chart_json_serialized/25", {serialized_chart : serializedJsonChartWrapperWithNoData});
+    console.log('_______________________________________________________________________________________');
+    console.log('serializedJsonChartWrapperWithNoData:');
+    console.log(serializedJsonChartWrapperWithNoData);
+// var ac = {"containerId":"chart_div","options":{"chartArea":{"width":"auto","height":"auto"},"hAxis":{"viewWindowMode":"pretty","viewWindow":{},"useFormatFromData":true},"title":"EventIDs","vAxes":[{"title":null,"minValue":null,"maxValue":null,"viewWindowMode":"pretty","viewWindow":{"max":null,"min":null},"useFormatFromData":true},{"viewWindowMode":"pretty","viewWindow":{},"useFormatFromData":true}],"is3D":false,"pieHole":0,"booleanRole":"certainty","colors":["#3366CC","#DC3912","#FF9900","#109618","#990099","#0099C6","#DD4477","#66AA00","#B82E2E","#316395","#994499","#22AA99","#AAAA11","#6633CC","#E67300","#8B0707","#651067","#329262","#5574A6","#3B3EAC","#B77322","#16D620","#B91383","#F4359E","#9C5935","#A9C413","#2A778D","#668D1C","#BEA413","#0C5922","#743411"]},"state":{},"chartType":"PieChart"};
+// var clone = new google.visualization.ChartWrapper(ac);
+// var data = google.visualization.arrayToDataTable([["Spuds", "count"], ["potato", 1], ["potatoe", 2]]);
+// clone.setDataTable(data);
+// clone.setOption('title', "cloned from db string");
+// clone.draw(document.getElementById('tojson_clone'));
+    // cls: to draw the clone:
+    // clone.setOption('title', "The reuseable 'ChartWrapper.toJson()' serialized clone");
+    // clone.draw(document.getElementById('tojson_clone'));
+  }
+</script>
+</body>
+</html>

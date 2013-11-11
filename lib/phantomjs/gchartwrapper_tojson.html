@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta http-equiv="content-type" content="text/html; charset=utf-8"/>
+  <title>
+    Google Visualization API Sample
+  </title>
+  <script type="text/javascript" src="http://www.google.com/jsapi"></script>
+  <script type="text/javascript">
+    google.load('visualization', '1');
+  </script>
+  <script type="text/javascript">
+    function drawVisualization() {
+      var wrapper = new google.visualization.ChartWrapper({
+        // chartType: 'BarChart',
+        // chartType: 'ColumnChart',
+        // chartType: 'LineChart',
+        chartType: 'PieChart',
+        // dataTable: [["Eventids by Host", "count"], ["7035", 3], ["1202", 3]],
+        // dataTable: [['Germany', 'USA', 'Brazil', 'Canada', 'France', 'RU'], [700, 300, 400, 500, 600, 800]],
+        // options: {'title': 'Countries'},
+        options: {
+          title: 'Countries',
+          is3D: false,
+          colors: ['darkorange','teal','tomato','cornflowerblue','green','blue','brown','red'],
+          chartArea: {width:'auto', height:'auto'}
+        },
+        containerId: 'chartone'
+      });
+      var data = google.visualization.arrayToDataTable([["Eventids by Host", "count"], ["7035", 3], ["1202", 3]]);
+      wrapper.setDataTable(data);
+      wrapper.draw();
+      var serialized = wrapper.toJSON();
+      console.log(serialized);
+      var clone = new google.visualization.ChartWrapper(serialized);
+      clone.setOption('title', 'This is a clone');
+      clone.draw(document.getElementById('chartone_clone'));
+    }
+    google.setOnLoadCallback(drawVisualization);
+  </script>
+</head>
+<body style="font-family: Arial;border: 0 none;">
+<h1>PhantomJS testing</h1>
+<div id="chartone" style="width: 600px; height: 400px;"></div>
+<div id="chartone_clone" style="width: 600px; height: 400px;"></div>
+</body>
+</html>

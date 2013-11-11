@@ -1,0 +1,25 @@
+<h2>Groups</h2>
+<% unless @groups.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @groups %>
+  </span>
+  <br />
+  <table class="table table-striped">
+    <tbody>
+      <% @groups.each do |group| %>
+        <tr>
+          <td><%= link_to group.name, edit_group_path(group) %></td>
+          <td><%= group.users.map {|u| u.username}.join(', ') %></td>
+          <% if current_user.role?(:admin) && (group.name != 'admins') %>
+          	<td>
+							<%= link_to 'delete', group, data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+						</td>
+          <% else %>
+          	<td>&nbsp;</td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @groups, inner_window: 2, style: 'font-size:small' %>
+<% end %>

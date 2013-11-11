@@ -1,0 +1,223 @@
+<div class="modal fade" id="search-help" style="display:none">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">x</button>
+      <h3>Search Help</h3>
+  </div>
+  <div class="modal-body">
+    <h4>
+      <button class="btn-large btn-primary" style="text-decoration:none" title="submit search">
+        <i class="icon-search icon-white"></i>&nbsp;&nbsp;Search
+      </button>
+    </h4>
+    <blockquote>
+      <p>
+        After entering <b>search terms</b>, or using 
+        <button class="add btn btn-mini" style="text-decoration:none" title="add more fields to match">
+          <i class="icon-plus"></i>&nbsp;fields
+        </button>
+        to enter additional search fields, click this button to perform a search on all of the log collection nodes accessible by you.
+      </p>
+    </blockquote>
+    <div class="alert alert-info">
+      <h4>name this search here (optional)</h4>
+      <blockquote>
+        <p>
+          Optionally, you may enter a name then click this button to save and perform this search.
+          <br />
+          When left unnamed, a search is automatically created with a name of the current time(utc).
+          <br />
+          To list all searches click on <b>Searches</b> then <b>List</b>.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-success">
+      <h4>From mm/dd/yyyy</h4>
+      <blockquote>
+        <p>
+          Matches log timestamps on or after the date entered. 
+          Clicking in this field will pop up a calendar to select a date.
+          When typing a date be sure to use the format mm/dd/yyyy.
+        </p>
+      </blockquote>
+      <h4>12:00:00</h4>
+      <blockquote>
+        <p>
+          Time portion of the 'From' date, which must be entered in military(24 hour) time format.
+        </p>
+      </blockquote>
+      <h4>To mm/dd/yyyy (optiona)</h4>
+      <blockquote>
+        <p>
+          Matches log timestamps on or before the date entered. 
+          Clicking in this field will pop up a calendar to select a date.
+          When typing a date be sure to use the format mm/dd/yyyy.
+          Also, the To date must be after the From date.
+        </p>
+      </blockquote>
+      <h4>23:59:59</h4>
+      <blockquote>
+        <p>
+          Time portion of the 'To' date, which must be entered in military(24 hour) time format.
+        </p>
+      </blockquote>
+      <h4>Note:</h4>
+      <blockquote>
+        <p>
+          All dates/times entered refer to the UTC time zone.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>Host IP range</h4>
+      <blockquote>
+        <p>
+          Match host IP's within the begin/end range entered.
+        </p>
+      </blockquote>
+      <h4>Notes:</h4>
+      <blockquote>
+        <p>
+          - only IPv4 addresses are supported
+          <br />
+          - to match an exact host IP use the "+ fields"
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>search terms</h4>
+      <blockquote>
+        <p>
+          - Enter search terms here, such as 10.0.0.1, security, 1202, "some@email.com", www.google.com, and so on.
+          <br />
+          - A search can not begin with '&amp;', ' |', as these are meant to be used between words.
+          <br />
+          - A search containing only a '!'(not) is not allowed.
+          <br />
+          - The words 'and', 'or', 'not' are treated as words, so use the '&amp;', '|', '!' symbols when you intend boolean operations.
+        </p>
+        <br />
+        <h4>AND &rarr; <b>&amp;</b> <em>or</em> <b>space</b></h4>
+        <blockquote>
+          <p>
+            Spaces between words/terms will AND those words/terms, which is the same as using the &amp; operator.
+            <br />
+            examples:
+            <br />
+            <b>1202 security</b> &rarr; matches only log records containing both terms
+            <br />
+            <b>1202 &amp; security</b> &rarr; same as above
+            <br />
+            <b>(1202 &amp; security)</b> &rarr; same as above, but with parenthesis to group terms
+            <br />
+            <b>(1202 security)</b> &rarr; same as above
+          </p>
+        </blockquote>
+        <h4>OR &rarr; <b>|</b></h4>
+        <blockquote>
+          <p>
+            The | symbol between words/terms will OR those words/terms, which matches any log records with either word/term.
+            <br />
+            examples:
+            <br />
+            <b>1202 | security</b> &rarr; matches log records containing either word
+            <br />
+            <b>(1202 | security)</b> &rarr; same as above, but with parenthesis to group terms
+          </p>
+        </blockquote>
+      </blockquote>
+    </div>
+    <div class="alert alert-success">
+      <h4>
+        <button class="add btn btn-mini" style="text-decoration:none" title="add more fields to match">
+          <i class="icon-plus"></i>&nbsp;fields
+        </button>
+      </h4>
+      <blockquote>
+        <p>
+          Click this button to add additional fields to match.
+          Each line added is prefixed with an <b>and/or</b> selection, a sources selection, a fields selection based on the source selected, an boolean operator selection, and a match values entry.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>
+        or/and
+      </h4>
+      <blockquote>
+        <p>
+          After clicking on the add more fields button, the <b>or/and</b> select list will be shown as a prefix to each new line added.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert">
+      <h4>
+        select data source
+      </h4>
+      <blockquote>
+        <p>
+          Select a log data source using this select list.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>
+        select field
+      </h4>
+      <blockquote>
+        <p>
+          After selecting a log data source, this select list will change based on the data source chosen to show a list of available <b>fields</b>.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert">
+      <h4>
+        =
+      </h4>
+      <blockquote>
+        <p>
+          After selecting a field, you may select an <b>operator</b> from this list.
+          <ul>
+            <li><b>=</b> is <em>equal to</em></li>
+            <li><b>!=</b> is <em>not equal to</em></li>
+            <li><b>&gt;=</b> is <em>greater than or equal to</em></li>
+            <li><b>&lt;=</b> is <em>less than or equal to</em></li>
+          </ul>
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>
+        match values
+      </h4>
+      <blockquote>
+        <p>
+          Enter values to match here, such as words, phrases(in double quotes), email address(in double quotes), IP address, number, and so on.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert">
+      <h4>
+        <button class="remove btn btn-mini" style="text-decoration:none" title="remove this field">
+          <i class="icon-remove"></i>
+        </button>
+      </h4>
+      <blockquote>
+        <p>
+          After adding a new field, you may click this button to remove it.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-danger">
+      <h4>
+        <button class="btn btn-mini btn-info" style="text-decoration:none" title="search help">
+          <i class="icon-question-sign icon-white"></i>&nbsp;help
+        </button>
+      </h4>
+      <blockquote>
+        <p>
+          Clicking this button brought you here.
+        </p>
+      </blockquote>
+    </div>
+  </div>
+</div>

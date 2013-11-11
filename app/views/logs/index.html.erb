@@ -1,0 +1,34 @@
+<h2>Watchers for Host Log Counts</h2>
+<% unless @logs.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @logs %>
+  </span>
+  <br />
+  <table class="table table-striped">
+		<thead>
+			<th>Name</th>
+			<th>IPs/Hostnames</th>
+			<th>Run At</th>
+		</thead>
+    <tbody>
+      <% @logs.each do |log| %>
+        <tr>
+          <td>
+	          <%= link_to log.name, edit_log_path(log), title: 'click to edit', style: "text-align:left" %>
+          </td>
+          <!-- <td><%#= log.active ? "Yes" : "No" %></td> -->
+					<td>
+						<% log.host_ips.split(',').each_with_index do |ip,x| %>
+							<%= x+1 %>. <%= ip %><br>
+						<% end %>
+					</td>
+          <td><%= log.auto_run_at %></td>
+          <td width="6%">
+						<%= link_to 'delete', log_path(id: log.id), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, class: 'btn btn-danger btn-mini' %>
+					</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @logs, inner_window: 2, style: 'font-size:small' %>
+<% end %>

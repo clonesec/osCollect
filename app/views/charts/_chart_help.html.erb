@@ -1,0 +1,86 @@
+<div class="modal fade" id="chart-help" style="display:none">
+  <div class="modal-header">
+    <button class="close" data-dismiss="modal">x</button>
+      <h3>Chart Help</h3>
+  </div>
+  <div class="modal-body">
+    <div class="alert alert-info">
+      <h4>Name</h4>
+      <blockquote>
+        <p>
+          A chart name is required.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>Library</h4>
+      <blockquote>
+				Currently, there are two choices:
+				<ol>
+					<li>Externel/remote using Google Chart Tools API</li>
+					<ul>
+						<li>requires external access to Google's web site</li>
+						<li>can be slow due to Google traffic and internet latency</li>
+						<li>can be throttled by Google if there too many back-to-back requests</li>
+					</ul>
+					<li>Internal/local using Flotr2</li>
+					<ul>
+						<li>external access is not required</li>
+						<li>it only relies on Javascript in the web browser</li>
+						<li>very fast</li>
+					</ul>
+				</ol>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>Type</h4>
+      <blockquote>
+        <p>
+          Select a chart type:
+					<ul>
+						<li>BarChart (horizontal bars)</li>
+						<li>ColumnChart (vertical bars)</li>
+						<li>LineChart</li>
+						<li>PieChart</li>
+					</ul>
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>Title</h4>
+      <blockquote>
+        <p>
+          A chart title is required and may appear as a header when the chart is displayed.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>Group By</h4>
+      <blockquote>
+        <p>
+          This attribute/field will be used to group matching log records based on the selected saved search.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-info">
+      <h4>Search</h4>
+      <blockquote>
+        <p>
+          Selected a previously saved search which will be used to find and gather data for this chart.
+        </p>
+      </blockquote>
+    </div>
+    <div class="alert alert-danger">
+      <h4>
+        <button class="btn btn-mini btn-info" style="text-decoration:none" title="chart help">
+          <i class="icon-question-sign icon-white"></i>&nbsp;help
+        </button>
+      </h4>
+      <blockquote>
+        <p>
+          Clicking this button brought you here.
+        </p>
+      </blockquote>
+    </div>
+  </div>
+</div>

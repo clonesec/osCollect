@@ -1,0 +1,71 @@
+<div id="<%=chart_div_name%>" style="height:<%=chart_height%>; width:<%=chart_width%>;"></div>
+<% 	# e.g. [["service_control_manager", 195874], ["url", 196563], ["unknown", 711], ["windows", 1]]
+		data = [] 
+		labels = []
+		chart_results.each_with_index do |result, x|
+			labels << "#{"'"+result.value+"'"}"
+		  data << "[#{x-1}, #{result.hits}]"
+		end
+		title = chart_is_widget ? 'null' : "'#{chart.chart_title}'"
+		show_legend = chart_is_widget ? 'false' : 'true'
+%>
+<script type='text/javascript'>
+$(document).ready(function() {
+	(function basic_bars(container, horizontal) {
+		var point_labels = [<%= raw(labels.join(',')) %>];
+		var horizontal = (horizontal ? true : false);
+		Flotr.draw(container,
+		[[<%= raw(data.join(",\n")) %>]],
+		{
+			colors : ["#3366CC","#DC3912","#FF9900","#109618","#990099"],
+			title : <%= raw(title) %>,
+			mouse: {
+				fillOpacity : 0,
+				track : true,
+				trackDecimals : 0,
+				// cls: does not work:
+				// trackFormatter : function(obj){ return point_labels[obj.x]+" = "+obj.y.replace(/(\d)(?=(\d\d\d)+(?!\d))/g, "$1,"); },
+	      // position : 'ne',
+	      position : 's',
+        relative : true
+			},
+			points : { show : true },
+			lines : { show : true },
+			grid: {
+				minorVerticalLines: true
+			},
+			markers: {
+			  show: true,
+			  position: 'rm'
+			  // position: 'ct'
+			},
+			yaxis: {
+				tickDecimals: 0,
+				autoscale: true
+			},
+			xaxis: {
+				tickDecimals: 0,
+			  tickFormatter: function (x) {
+					// console.log(typeof(point_labels[x]));
+					// if (typeof point_labels[x] === 'undefined') {
+					// 	return;
+					// } else {
+						z = parseInt(x);
+						z = z + 1;
+						console.log(typeof(z));
+				    // return z.toString();
+				    return point_labels[z];
+					// }
+			  }
+			},
+			legend : {
+			 position : 'nw'
+			},
+			// spreadsheet : {
+			//  show : true,
+			//  tickFormatter : function (e) { console.log(e); return e+''; }
+			// }
+		});
+	})(document.getElementById("<%=chart_div_name%>"));
+});
+</script>

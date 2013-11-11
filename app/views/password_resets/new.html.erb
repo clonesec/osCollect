@@ -1,0 +1,37 @@
+<div class="container">
+  <div class="span5 content" style="margin-left:-100px">
+    <h1 style="margin-left:35px; margin-bottom:20px">osCollect</h1>
+    <div class="row">
+      <div class="login-form">
+        <% unless flash.empty? %>
+            <div class="alert alert-error">
+              <% flash.each do |name, msg| %>
+                <%= content_tag :div, msg, class: "flash flash_#{name}" %>
+              <% end %>
+            </div>
+        <% end %>
+        <%= form_tag password_resets_path, method: :post, class: "user_new" do %>
+          <fieldset>
+            <div class="control-group">
+              <!-- <label class="control-label" for="input01"><b>Email:</b></label> -->
+              <div class="controls">
+                <%= text_field_tag :email, params[:email], class: "span4 input-xlarge", placeholder: "enter email for Reset Password instructions" %>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Reset Password</button>
+          </fieldset>
+        <% end %>
+      </div>
+    </div>
+    <div class="login_footer">
+      <center>
+        2012 
+        <% if APP_CONFIG[:show_versions_and_limits] %>
+            &nbsp;-&nbsp;
+            version: <%= APP_CONFIG[:version] %>
+            &nbsp;&nbsp;
+        <% end %>
+      </center>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,85 @@
+<div id="alert">
+	<% if @alert.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @alert.errors.full_messages.each do |msg| %>
+	        <li><%= msg.gsub('ip', 'IP') %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @alert, :html => { :class => 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend>Alert</legend>
+    	<%= f.hidden_field :active %>
+      <div class="control-group">
+        <label class="control-label" for="input01">Active</label>
+        <div class="controls">
+					<div class="btn-group" id="alertActive">
+				    <input type="button" class="btn b1 <%=@alert.active ? 'btn-success' : nil%>" value="On">
+				    <input type="button" class="btn b0 <%=@alert.active ? nil : 'btn-danger'%>"  value="Off">
+					</div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input01">Name</label>
+        <div class="controls">
+        	<%= f.text_field :name, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label" for="input02">Description</label>
+        <div class="controls">
+	        <%= f.text_area :description, rows: 4, class: 'span5' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Search</label>
+        <div class="controls">
+					<% searches = Search.list_saved_searches(current_user) %>
+					<% if searches.blank? %>
+							<div style="border: 1px black solid; background-color:antiquewhite; font-size:18px; margin-top:5px">
+								<br />
+								<blockquote>
+									Warning:&nbsp;&nbsp;There are no Searches available for selection.
+									<br /><br />
+									&nbsp;You must create a Search before creating a Alert.
+									<br /><br />
+									&nbsp;Also, note that if you delete a Search upon which this Alert depends that this Alert is also deleted.
+								</blockquote>
+							</div>
+					<% else %>
+          		<%= f.select(:search_id, options_for_select(searches, @alert.search_id), {include_blank: 'select previously saved Search'}, class: "span4") %>
+				  <% end %> 
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Alert when</label>
+        <div class="controls">
+          <%= f.select(:threshold_operator, options_for_select([['greater than','gt'],['less than','lt']], @alert.threshold_operator), class: "span2") %>
+					&nbsp;&nbsp;
+        	<%= f.text_field :threshold_count, class: 'span2', placeholder: "threshold count" %>
+					&nbsp;&nbsp;
+					matching logs occur in
+					&nbsp;&nbsp;
+          <%= f.select(:threshold_time_seconds, options_for_select([['5 minutes',300],['10 minutes',600],['15 minutes',900],['20 minutes',1200],['30 minutes',1800],['60 minutes',3600]], @alert.threshold_time_seconds), class: "span2") %>
+        </div>
+      </div>
+    	<%= f.hidden_field :logs_in_email %>
+      <div class="control-group">
+        <label class="control-label">Logs in email</label>
+        <div class="controls">
+					<div class="btn-group" id="alertLogsInEmail">
+				    <input type="button" class="btn b3 <%=@alert.logs_in_email ? 'btn-success' : nil%>" value="Yes">
+				    <input type="button" class="btn b2 <%=@alert.logs_in_email ? nil : 'btn-danger'%>"  value="No">
+					</div>
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.submit nil, class: "btn btn-primary" %>
+        <%= link_to 'Cancel', alerts_path, :class => 'btn' %>
+      </div>
+    </fieldset>
+  <% end %> 
+</div>

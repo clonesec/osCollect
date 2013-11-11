@@ -1,0 +1,12 @@
+<h2>
+	<%= @type.camelcase %> history for host <%= @host.host %>
+	&nbsp;&nbsp;<%= @host.hostname unless @host.hostname.blank? %>
+</h2>
+<%= link_to 'hosts', hosts_path, class: 'btn btn-primary btn-mini', title: 'list hosts' %>
+<% if @type == 'weekly' %>
+	<%= render 'weekly' %>
+<% elsif @type == 'daily' %>
+	<%= render 'daily' %>
+<% else %>
+	<%= render 'outages' %>
+<% end %>

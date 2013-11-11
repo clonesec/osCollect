@@ -1,0 +1,30 @@
+<% if @history.blank? %>
+	<br /><br />
+	<div class="alert alert-info">
+		<h3>No history found.</h3>
+	</div>
+<% else %>
+	<table class="table table-striped">
+	  <thead>
+	    <th style="text-align:right; width:15%">count</th>
+	    <th>time period</th>
+	    <th>last run</th>
+	  </thead>
+	  <tbody>
+	    <% @history.each do |history| %>
+	      <tr>
+					<td style="text-align:right; width:15%"><%= number_with_delimiter(history.count) %></td>
+					<td>
+						<%= history.start_time.utc.strftime("%A, %b %-d, %Y %H:%M:%S %Z")%> 
+						&nbsp;-&nbsp; 
+						<%= history.end_time.utc.strftime("%A, %b %-d, %Y %H:%M:%S %Z")%>
+						&nbsp;&nbsp;
+						day: <%= history.start_time.utc.yday %>
+					</td>
+					<td><%= history.updated_at.utc.strftime("%A, %b %-d, %Y %H:%M:%S %Z")%></td>
+	      </tr>
+	    <% end %>
+	  </tbody>
+	</table>
+	<%= will_paginate @history, inner_window: 2, style: 'font-size:small' %>
+<% end %>

@@ -1,0 +1,67 @@
+<h3>
+  <%= link_to 'chart:', charts_path(id: @chart.id), class: 'btn btn-primary btn-mini', title: 'edit chart', style: "margin-top:-5px" %>
+  <%=@chart.name%>
+</h3>
+<%
+result = []
+result << [escape_javascript(@chart.chart_title), 'count']
+merge_groupby_counts = Hash.new(0)
+@all_results.group_by_results.each do |groupby_count|
+  merge_groupby_counts[escape_javascript(groupby_count[1])] += groupby_count[2]
+end
+result += merge_groupby_counts.collect { |key, value| [key, value] }
+count = @all_results.group_by_total
+chart_results = (count <= 0) ? '[]' : result
+%>
+<% if @all_results.group_by_total <= 0 %>
+    <div class="alert alert-error" style="margin-top:-18px">
+      <h5>no results found for this chart</h5>
+    </div>
+<% else %>
+		<% chart_div_name = "#{@chart.id}_#{@chart.user_id}_#{@chart.search_id}" %>
+		<div id='<%=chart_div_name%>' style="height:300px"></div>
+		<% 	# [["nt", "count"], ["service_control_manager", 195874], ["url", 196563], ["unknown", 711], ["windows", 1]]
+				label_data = []
+				labels = []
+				chart_results.each_with_index do |result, x|
+					next if x <= 0 # skip header/title
+					labels << "#{"'"+result[0]+"'"}"
+				  # label_data << "{data : [[#{result[1]}, #{x}]]}" # horizontal
+				  label_data << "{data : [[#{x}, #{result[1]}]]}" # vertical
+				end
+				label_data.sort!
+		%>
+		<script type='text/javascript'>
+		jQuery(document).ready(function() {
+			(function basic_bars(container, horizontal) {
+				var labels = [<%= raw(labels.join(",\n")) %>];
+			  // var horizontal = (horizontal ? true : false); // Show horizontal bars
+			  var horizontal = false;
+			  Flotr.draw(container,
+					[<%= raw(label_data.join(",\n")) %>],
+			    {
+			      bars : {
+			        show : true,
+			        horizontal : horizontal,
+			        shadowSize : 0,
+			        barWidth : 0.5
+			      },
+			      mouse : {
+			        track : true,
+							trackDecimals: 0,
+			        relative : true
+			      },
+			      yaxis : {
+			        min : 0,
+			        autoscaleMargin : 1
+			      },
+			      xaxis : {
+							tickDecimals: 0,
+			      	tickFormatter : function(n){ return labels[n-1]; }
+			      }  
+			    }
+			  );
+			})(document.getElementById("<%=chart_div_name%>"));
+		});
+		</script>
+<% end %>

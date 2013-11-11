@@ -1,0 +1,86 @@
+<h2>Reports</h2>
+<% unless @reports.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @reports %>
+  </span>
+  <br />
+  <table class="table table-striped">
+    <thead>
+      <th>name</th>
+      <th>sections</th>
+      <th>auto run</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% @reports.each do |report| %>
+				<% charts_found = report.report_charts.any? %>
+				<% searches_found = report.report_searches.any? %>
+        <tr>
+          <td>
+            <%= link_to report.name, edit_report_path(report), title: 'click to edit this report' %>
+            <div style="padding-top:10px; padding-bottom:15px">
+							<% if charts_found || searches_found %>
+									&nbsp;
+			            <%= link_to "List #{pluralize(report.pdfs.count, 'PDF')}", pdfs_path(id: report.id), title: "list all PDF's created for this report", class: 'btn btn-success btn-mini' %>
+									<br />
+				          <%= link_to "history", reports_history_path(report), class: 'btn btn-info btn-mini', style: "margin-top:10px; margin-left:20px" %>
+							<% else %>
+      						<%= link_to 'edit to select a chart/search', edit_report_path(report), class: 'btn btn-warning btn-mini', style: "margin-top:10px", title: "At least one chart/search must to be selected for this Report!" %>
+				      <% end %>
+						</div>
+						<% if report.auto_run %>
+								<dl class="dl-horizontal" style="margin:0px; font-size:small">
+								  <dt>auto run at:</dt>
+								  <dd><%= report.auto_run_at %> <%#= raw("at #{report.auto_run_daily_hour}:00 UTC") unless report.auto_run_daily_hour.blank? %></dd>
+								  <dt>runs:</dt>
+								  <dd><%= number_with_delimiter(report.auto_run_count) %></dd>
+								  <dt>last:</dt>
+								  <dd><%= report.auto_run_last_at %></dd>
+								</dl>
+			      <% end %>
+          </td>
+					<td>
+						<% if charts_found %>
+			          <div class="alert alert-success">
+			            <h5 style="margin-top:-10px">charts:</h5>
+										<ol style="margin-top:-10px">
+											<% report.report_charts.order(position: :asc).each do |report_chart| %>
+													<% next if report_chart.chart_id.blank? %>
+													<li><%= report_chart.chart.name %></li>
+								      <% end %>
+										</ol>
+								</div>
+			      <% end %>
+						<% if searches_found %>
+			          <div class="alert" style="margin-top:-10px">
+			            <h5 style="margin-top:-10px">searches:</h5>
+										<ol style="margin-top:-10px">
+											<% report.report_searches.order(position: :asc).each do |report_search| %>
+													<% next if report_search.search_id.blank? %>
+													<li><%= report_search.search.blank? ? raw("<strong><b>The referenced Search was deleted, please update this Report.</b></strong>") : report_search.search.name %></li>
+								      <% end %>
+										</ol>
+								</div>
+			      <% end %>
+					</td>
+          <td><%= report.auto_run ? 'Yes' : 'No' %></td>
+          <td width="6%">
+						<% if report.shared %>
+								<%= link_to 'unshare', share_path(id: report.id, share_token: report.shared, type: 'Report'), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+								<br /><br />
+			      <% else %>
+								<% if charts_found || searches_found %>
+									<%= button_to 'share', shares_path(id: report.id, type: 'Report'), class: "btn btn-success btn-mini share-report" %>
+					      <% else %>
+									<%= link_to raw("<del>share</del>"), '#', class: "btn btn-success btn-mini disabled", title: "Can't share an incomplete Report.  At least one chart/search must to be selected for this Report!" %>
+									<br /><br />
+					      <% end %>
+			      <% end %>
+						<%= link_to 'delete', report_path(id: report.id), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+					</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @reports, inner_window: 2, style: 'font-size:small' %>
+<% end %>

@@ -1,0 +1,75 @@
+<div id="chart">
+	<% if @chart.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @chart.errors.full_messages.each do |msg| %>
+	        <li><%= msg.gsub('ip', 'IP') %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @chart, :html => { :class => 'form-horizontal' } do |f| %>
+		<fieldset>
+      <legend>Chart</legend>
+			<div class="control-group">
+				<label class="control-label">Name</label>
+				<div class="controls">
+					<%= f.text_field :name, id: "chart_name", class: "span4",  placeholder: "chart name (required)", style: "margin-top:7px" %>
+					<button class="btn btn-mini btn-info pull-right" data-toggle="modal" href="#chart-help" style="margin-top:2px; margin-bottom:5px; margin-right:24px; text-decoration:none" title="chart help">
+					<i class="icon-question-sign icon-white"></i>&nbsp;help
+					</button>
+				</div>
+			</div>
+			<div class="control-group">
+			  <label class="control-label">Library</label>
+			  <div class="controls">
+					<%= f.select(:chart_library, options_for_select(Chart.chart_libraries, @chart.chart_library), {}, class: "span5") %>
+				</div>
+			</div>
+			<div class="control-group">
+			  <label class="control-label">Type</label>
+			  <div class="controls">
+					<%= f.select(:chart_type, options_for_select(Chart.chart_types('gchart'), @chart.chart_type), {}, class: "span2") %>
+				</div>
+			</div>
+			<div class="control-group">
+			  <label class="control-label">Title</label>
+			  <div class="controls">
+					<%= f.text_field :chart_title, class: 'span4', placeholder: "chart title (required)" %>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Group By</label>
+				<div class="controls">
+					<%= f.select(:group_by, options_for_select(DataSourceField.groupby_fields, @chart.group_by), {}, {class: "span3"}) %>
+				</div>
+			</div>
+			<div class="control-group">
+				<label class="control-label">Search</label>
+				<div class="controls">
+					<% searches = Search.list_saved_searches(current_user) %>
+					<% if searches.blank? %>
+							<div style="border: 1px black solid; background-color:antiquewhite; font-size:18px; margin-top:5px">
+								<br />
+								<blockquote>
+									Warning:&nbsp;&nbsp;There are no Searches available for selection.
+									<br /><br />
+									&nbsp;You must create a Search before creating a Chart.
+									<br /><br />
+									&nbsp;Also, note that if you delete a Search upon which this Chart depends that this Chart is also deleted.
+								</blockquote>
+							</div>
+					<% else %>
+							<%= f.select(:search_id, options_for_select(searches, @chart.search_id), class: "span4") %>
+					<% end %>
+				</div>
+			</div>
+		</fieldset>
+    <div class="form-actions">
+      <%= f.submit nil, class: "btn btn-primary" %>
+      <%= link_to 'Cancel', charts_list_path, :class => 'btn' %>
+    </div>
+	<% end %>
+</div>
+<%= render :partial => 'chart_help' %>

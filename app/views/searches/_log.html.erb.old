@@ -1,0 +1,17 @@
+<tr>
+  <td>
+    <%#= Time.at(log[1]).utc.strftime("%a.%b.%d,%Y %H:%M:%S") %>
+    <%= log[1] %>
+  </td>
+  <td>
+    <%= log[5] %>
+    <br />
+    <!-- host=<%#= Search.ip_numeric_to_s(log[2]) %> -->
+    host=<%= log[2] %>
+    program=<%= log[3] %>
+    source=<%= log[4] %>
+    <%= xfields unless xfields.blank? %>
+    node=<%= "#{log[18]}" %> <span style="font-size:10px"><%= "(#{log[19]})" %></span>
+    [docid=<%=log[0]%>]
+  </td>
+</tr>

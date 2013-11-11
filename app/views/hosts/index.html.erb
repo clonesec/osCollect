@@ -1,0 +1,48 @@
+<h2>Hosts</h2>
+<!-- <div class="alert alert-error">
+  <a class="close" data-dismiss="alert">×</a>
+	<h4 style="text-align:center">____________ Under development ____________</h4>
+</div> -->
+<div class="alert alert-info">
+  <a class="close" data-dismiss="alert">×</a>
+		Note: any new hosts detected are automatically added when the <b>daily</b> and <b>weekly</b> 
+		log count jobs are run, but hostnames are not automatically detected.<br />
+		<span style="margin-left:40px">
+			Also, this list of hosts is used as a reference to notice any hosts that 
+			are <b>not</b> sending logs, i.e. an <b>outage</b> has occurred.
+		</span>
+</div>
+<% unless @hosts.blank? %>
+  <table class="table table-striped">
+    <thead>
+      <th>IP</th>
+      <th>hostname</th>
+      <th>logging history</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% @hosts.each do |host| %>
+        <tr>
+          <td>
+						<%= link_to "#{host.host}", edit_host_path(host), title: 'edit host' %>
+					</td>
+          <td>
+						<%= host.hostname unless host.hostname.blank? %>
+					</td>
+          <td>
+	      		<%#= link_to 'daily', '#', class: 'btn btn-primary btn-mini disabled' %>
+	      		<%= link_to 'daily', host_path(id: host.host_ip, type: 'daily'), class: 'btn btn-primary btn-mini' %>
+						&nbsp;&nbsp;
+	      		<%= link_to 'weekly', host_path(id: host.host_ip, type: 'weekly'), class: 'btn btn-primary btn-mini' %>
+						&nbsp;&nbsp;
+						<% if HostHistory.where(host_ip: host.host_ip).where('count = 0').exists? %>
+	      			<%= link_to 'outages', host_path(id: host.host_ip, type: 'outage'), class: 'btn btn-info btn-mini', title: 'this host has had outages' %>
+						<% end %>
+					</td>
+          <td><%= link_to 'delete', host_path(id: host.id), data: {confirm: "\nThis will not delete the daily and weekly log counts for this host. \n\nAlso, this host may be added again the next time a daily or weekly job runs with logs sent from this host. \n\nAre you sure?"}, method: :delete, class: 'btn btn-danger btn-mini' %></td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @hosts, inner_window: 2, style: 'font-size:small' %>
+<% end %>

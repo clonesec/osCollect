@@ -1,0 +1,22 @@
+<%=@user.username%>,
+
+There were <%=number_with_delimiter(@total)%> matches found during the time period of 
+<%=@from_timestamp.strftime("%a, %b %-d, %Y %H:%M:%S")%> to <%=@to_timestamp.strftime("%a, %b %-d, %Y %H:%M:%S")%>
+with a threshold of <%=@threshold_operator%> <%=@alert.threshold_count%> matching logs in <%=@threshold_time%> minutes.
+
+Alert Description:
+<%=@alert.description%>
+
+Search details -------------------------------------------------
+  saved search name: <%=@search.name%>
+  last updated on: <%= @search.updated_at.utc.strftime("%a, %b %d, %Y %H:%M:%S") %>
+  <%= (@search.host_from.blank? && @search.host_to.blank?) ? nil : "host IP range: #{@search.host_from} - #{@search.host_to}" %>
+  <%#= @search.sources.blank? ? nil : "log source types: " + @search.source_ids_to_names.join(', ') %>
+  <%= @search.query.blank? ? nil : "search query/terms: " + @search.query %>
+<% unless @search.search_fields.blank? %>
+  <%="+ fields: "%>
+		<% @search.search_fields.each do |sf| %>
+    <%= raw(sf.and_or) %> <%= DataSource.find(sf.data_source_id).name unless sf.data_source_id.blank? %>.<%= DataSourceField.find(sf.data_source_field_id).name unless sf.data_source_field_id.blank? %><%= DataFieldOperator.find(sf.data_field_operator_id).operator unless sf.data_field_operator_id.blank? %><%= sf.match_or_attribute_value %>
+		<% end %>
+<% end %>
+----------------------------------------------------------------

@@ -1,0 +1,40 @@
+<%= javascript_tag do %>
+  window.searchResultsPageSize = "<%= current_user.blank? ? 10 : current_user.search_results_page_size %>";
+  window.terms = <%= @search.highlights.blank? ? [] : raw(@search.highlights.to_json) %>;
+<% end %>
+
+<%= render 'form', datasources: @ds, datafieldoperators: @dfo %>
+
+<% unless @all_results.nil? %>
+  <div class="alert alert-success">
+    <a class="close" data-dismiss="alert">×</a>
+    Searched <%= pluralize(@all_results.sentinels.size, 'node')%> in <%=@elapsed%> seconds (actual search time was <%=@all_results.sphinx_time%>).
+    <br />
+    <% @all_results.log_counts.each do |lc| %>
+        <%=lc[0]%>: displaying <%= number_with_delimiter(lc[2]) %> of <%= number_with_delimiter(lc[1]) %> matches<br />
+    <% end %>
+  </div>
+  <% @all_results.errors.each do |error| %>
+    <div class="alert alert-error">
+      <b>Node</b>: <%= error[0] %> (<%= error[1] %>)<br />
+      <%= raw "Error: #{error[3]}<br />" unless error[3].blank? %>
+      <%= raw "Return code: #{error[4]}<br />" unless error[4].blank? %>
+      <%= raw "HTTP response code: #{error[5]}<br />" unless error[5].blank? %>
+      <%= raw "HTTP status: #{error[6]}<br />" unless error[6].blank? %>
+      <%= raw "<b>Search warnings</b>: <pre>#{error[7]}</pre><br />" unless error[7].blank? %>
+      <% err = error[8].blank? ? '' : error[8].gsub(': ', ":\n") %>
+      <%= raw "<b>Search errors</b>: <pre>#{err.to_yaml}</pre>" unless err.blank? %>
+    </div>
+  <% end %>
+  <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped table-bordered" id="logs">
+    <thead>
+      <th>timestamp</th>
+      <th>log msg and fields</th>
+    </thead>
+    <tbody>
+      <% @all_results.results.each do |result| %>
+        <%= render partial: 'log', locals: {log: result} %>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

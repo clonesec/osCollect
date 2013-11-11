@@ -1,0 +1,42 @@
+<div id="node">
+	<% if @host.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @host.errors.full_messages.each do |msg| %>
+        	<li><%= msg.gsub('ip', 'IP') %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @host, :html => { :class => 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend>Host</legend>
+			<div class="alert alert-info">
+			  <a class="close" data-dismiss="alert">×</a>
+				Note: any new hosts detected are automatically added when the <b>daily</b> and <b>weekly</b> 
+				log count jobs are run, but hostnames are not automatically detected.<br />
+				<span style="margin-left:40px">
+					Also, this host is added to a list of hosts which are used as a reference to notice any hosts that 
+					are <b>not</b> sending logs, i.e. an <b>outage</b> has occurred.
+				</span>
+			</div>
+      <div class="control-group">
+        <label class="control-label">Host IP</label>
+        <div class="controls">
+          <%= f.text_field :host, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Hostname</label>
+        <div class="controls">
+          <%= f.text_field :hostname, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.submit nil, class: "btn btn-primary" %>
+        <%= link_to 'Cancel', hosts_path, :class => 'btn' %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>

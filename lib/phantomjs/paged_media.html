@@ -1,0 +1,62 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<title>Paged Media for PDFs</title>
+	<style type="text/css" media="all">
+		@media print {
+			@page {
+				margin: 1.0in;
+				padding: 1em;
+				counter-increment: page;
+
+				@bottom-right {
+					padding-right:20px;
+					content: "Page " counter(page);
+				}
+				@bottom-center {
+					content: element(footer);
+				}
+
+				@top-center {
+					content: element(header);
+				}
+			}
+
+			#page-header {
+				display: block;
+				position: running(header);
+			}
+
+			#page-footer {
+				display: block;
+				position: running(footer);
+			}
+
+			.page-number:before {
+				content: counter(page);
+			}
+
+			.page-count:before {
+				content: counter(pages);
+			}
+		}
+		body { counter-reset: page 0;}
+	</style>
+</head>
+<body>
+<div id="page-header">
+	<p>Header text</p>
+</div>
+
+<!-- <div id="page-footer">
+	<p>Footer text</p>
+	<p>Page <span class="page-number"/> of <span class="page-count"/></p>
+</div> -->
+
+<div class="page">
+	<p>page <span class="page-number"/> of <span class="page-count"/></p>
+	<div class="pg-break" style="page-break-after:always"></div>
+	<p>page <span class="page-number"/> of <span class="page-count"/></p>
+</div>
+</body>
+</html>

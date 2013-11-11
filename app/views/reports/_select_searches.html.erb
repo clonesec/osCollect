@@ -1,0 +1,19 @@
+<% report_search = f.object %>
+<% if searches.blank? %>
+		<fieldset class="item" style="margin-top:2px">
+		  <div class="inline-inputs">
+				<strong>There are no Searches available for selection!</strong>
+		  </div>
+		</fieldset>
+<% else %>
+		<fieldset class="item" style="margin-top:2px">
+		  <div class="inline-inputs">
+		    <%= f.select(:search_id, options_for_select(searches, report_search.search_id), class: "span8") %>
+		    <button class="remove btn btn-mini" style="margin-top:-8px; text-decoration:none" title="remove this search">
+		      <i class="icon-remove"></i>
+		    </button>
+		  </div>
+		  <%= f.hidden_field :id %>
+		  <%= f.hidden_field :_destroy %>
+		</fieldset>
+<% end %>

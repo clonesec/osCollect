@@ -1,0 +1,25 @@
+<h2>Users</h2>
+<% unless @users.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @users %>
+  </span>
+  <br />
+  <table class="table table-striped">
+    <tbody>
+      <% @users.each do |user| %>
+        <tr>
+          <td><%= link_to user.username, edit_user_path(user) %></td>
+          <td><%= user.email %></td>
+          <% if current_user.role?(:admin) %>
+						<td>
+							<%= link_to 'delete', user, data: {confirm: "\n*** WARNING ***\n\nThis will also delete everything created by this user.\n\nThis action may take a while to complete, please be patient ... thank you.\n\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+						</td>
+          <% else %>
+	          <td>&nbsp;</td>
+          <% end %>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @users, inner_window: 2, style: 'font-size:small' %>
+<% end %>

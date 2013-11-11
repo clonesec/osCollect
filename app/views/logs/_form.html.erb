@@ -1,0 +1,74 @@
+<div id="log">
+	<% if @log.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @log.errors.full_messages.each do |msg| %>
+	        <li><%= msg.gsub('ip', 'IP') %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @log, :html => { :class => 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend>Watch Log Counts for specified Host IPs</legend>
+    	<%#= f.hidden_field :active %>
+      <!-- <div class="control-group">
+        <label class="control-label" for="input01">Active</label>
+        <div class="controls">
+					<div class="btn-group" id="logActive">
+				    <input type="button" class="btn b1 <%#=@log.active ? 'btn-success' : nil%>" value="On">
+				    <input type="button" class="btn b0 <%#=@log.active ? nil : 'btn-danger'%>"  value="Off">
+					</div>
+        </div>
+      </div> -->
+      <div class="control-group">
+        <label class="control-label">Watch Name</label>
+        <div class="controls">
+        	<%= f.text_field :name, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Description</label>
+        <div class="controls">
+	        <%= f.text_area :description, rows: 3, class: 'span5' %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Auto run at</label>
+        <div class="controls">
+          <%= f.select(:auto_run_at, options_for_select([['Both daily/weekly','both'],['Daily (runs every day at 12:05am UTC to process yesterday)','daily'],['Weekly (runs every Sunday at 12:15am UTC to process last week)','weekly']], @log.auto_run_at), {}, class: "span7") %>
+					<br />
+					<em>
+						A background job will run at the time selected and send an email listing 
+						the log counts for each IP entered below.
+					</em>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Send Email</label>
+        <div class="controls">
+          <%= f.select(:send_email, options_for_select([['Yes, always',true],['No, unless some hosts are not sending',false]], @log.send_email), {}, class: "span7") %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Host IPs/Names</label>
+        <div class="controls">
+	        <%= f.text_area :host_ips, rows: 8, class: 'span7' %>
+					<br />
+					<em>
+						Enter IP &lt;space&gt; Hostname(if known) separated by commas.
+						<br />
+						For example:
+					</em>
+					<br />
+					10.0.0.1 lonestar, 10.0.0.2, 10.0.0.3 mawg, . . .
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.submit 'Save Watch', class: "btn btn-primary" %>
+        <%= link_to 'Cancel', logs_path, :class => 'btn' %>
+      </div>
+    </fieldset>
+  <% end %> 
+</div>

@@ -1,0 +1,45 @@
+<div id="node">
+	<% if @node.errors.any? %>
+	  <div class="alert alert-error">
+	    <h4>Errors:</h4>
+	    <ul class="unstyled">
+	      <% @node.errors.full_messages.each do |msg| %>
+        	<li><%= msg.gsub('ip', 'IP') %></li>
+	      <% end %>
+	    </ul>
+	  </div>
+	<% end %>
+  <%= form_for @node, :html => { :class => 'form-horizontal' } do |f| %>
+    <fieldset>
+      <legend>Input Node</legend>
+      <div class="control-group">
+        <label class="control-label">Name</label>
+        <div class="controls">
+          <%= f.text_field :name, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Host name or IP</label>
+        <div class="controls">
+          <%= f.text_field :url_domain_ip, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Host port</label>
+        <div class="controls">
+          <%= f.text_field :url_port, class: "input-xlarge" %>
+        </div>
+      </div>
+      <div class="control-group">
+        <label class="control-label">Sentinel type</label>
+        <div class="controls">
+          <%= f.select(:sentinel_search_type_id, options_for_select(SentinelSearchType.all.map{|s| [s.name, s.id]}, @node.sentinel_search_type_id), {}, {class: "span3"}) %>
+        </div>
+      </div>
+      <div class="form-actions">
+        <%= f.submit nil, class: "btn btn-primary" %>
+        <%= link_to 'Cancel', nodes_path, :class => 'btn' %>
+      </div>
+    </fieldset>
+  <% end %>
+</div>

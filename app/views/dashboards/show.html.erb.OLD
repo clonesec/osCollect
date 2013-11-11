@@ -1,0 +1,28 @@
+<h3><%=@dashboard.name%></h3>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<% @charts.each do |chart|
+  result = []
+  result << [escape_javascript(chart.search.chart_title), 'count']
+  merge_groupby_counts = Hash.new(0)
+  chart.results.group_by_results.each do |groupby_count|
+    merge_groupby_counts[escape_javascript(groupby_count[1])] += groupby_count[2]
+  end
+  result += merge_groupby_counts.collect { |key, value| [key, value] }
+  count = chart.results.group_by_total
+  chart_results = (count <= 0) ? '[]' : raw(result)
+  chart_search = chart.search
+  %>
+  <% if chart.results.group_by_total <= 0 %>
+      <div class="alert alert-error" style="margin-top:-18px"><h5>no results found for this panel</h5></div>
+  <% else %>
+      <%= render 'chart',
+            chart_json_serialized:  raw(chart_search.chart_json_serialized),
+            chart_type:     chart_search.chart_type,
+            chart_title:    chart_search.chart_title,
+            chart_div_name: chart_search.name,
+            source_name:    DataSourceField.find(chart_search.group_by).data_source.name,
+            source_field:   DataSourceField.find(chart_search.group_by).name,
+            chart_results:  chart_results
+      %>
+  <% end %>
+<% end %>

@@ -1,0 +1,48 @@
+<div id='<%=chart_div_name%>' style="margin-left:-20px; margin-top:-10px; width:400px; height:200px;"></div>
+<%# note: using the package 'charteditor' will automatically load the appropriate
+          chart drawing packages, even though we are not using the editor here:  %>
+<script type="text/javascript">google.load('visualization', '1.1', {packages: ['charteditor']});</script>
+<script type='text/javascript'>
+$(document).ready(function() {
+	var wrapper<%=widget_id%> = null;
+  var noChartErrors = true;
+  var chart_type = "<%=chart_type.blank? ? 'Table' : chart_type%>";
+  var chart_json_serialized = <%=chart_json_serialized.blank? ? 'null' : chart_json_serialized%>;
+  if ( (chart_json_serialized == null) || (typeof chart_json_serialized === 'undefined') ) {
+    wrapper<%=widget_id%> = new google.visualization.ChartWrapper({
+      chartType: chart_type,
+      chartName: "ignore this",
+      options: {
+        // title: '<%=escape_javascript(chart_title)%>',
+        // title: null,
+        hAxis: {title: '<%=source_name%>.<%=source_field%>'},
+        is3D: false,
+        colors: ['teal','tomato','cornflowerblue','darkorange','green','blue','brown','red'],
+        chartArea: {width:'auto', height:'auto'},
+        sortColumn: 1, sortAscending: false, page: 'enable', pageSize: 10
+      },
+      containerId: '<%=chart_div_name%>'
+    });
+    }
+  else {
+    var chart_json_serialized = jQuery.parseJSON('<%=chart_json_serialized%>');
+    wrapper<%=widget_id%> = new google.visualization.ChartWrapper(chart_json_serialized);
+    wrapper<%=widget_id%>.setContainerId('<%=chart_div_name%>');
+    wrapper<%=widget_id%>.setOption('title', null);
+    wrapper<%=widget_id%>.setChartName("ignore this");
+  }
+
+  google.visualization.events.addListener(wrapper<%=widget_id%>, 'error', function errorHandler(e) {
+    noChartErrors = false;
+    console.log(noChartErrors);
+    console.log(e.id);
+    console.log(e.message);
+  });
+
+  var data<%=widget_id%> = google.visualization.arrayToDataTable(<%=chart_results%>);
+  wrapper<%=widget_id%>.setDataTable(data<%=widget_id%>);
+  wrapper<%=widget_id%>.draw(data<%=widget_id%>, {width: 200, height: 200});
+	widgetData.wrapper<%=widget_id%> = wrapper<%=widget_id%>
+	widgetData.data<%=widget_id%> = data<%=widget_id%>
+});
+</script>

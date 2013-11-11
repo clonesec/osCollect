@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>osCollect Report</title>
+  <%= csrf_meta_tags %>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <!-- HTML5 shim, for IE6-8 support of HTML elements ... come on, do people really use these -->
+  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js" type="text/javascript"></script>
+  <![endif]-->
+  <%= stylesheet_link_tag "application", :media => "all" %>
+  <style type="text/css">
+    div.pagebreak { page-break-before: always; }
+    div.alwaysbreak { page-break-before: always; }
+    div.nobreak:before { clear: both; }
+    div.nobreak{ page-break-inside: avoid; }
+		body {
+			counter-reset: page 0; 
+			margin: 0.1in;
+			padding: 0.1in;
+		}
+		table { page-break-inside: auto; } 
+		div.header {
+			font-size: 0.15in;
+			padding-top: 0.2in;
+			padding-bottom: 0.1in;
+		}
+		#pageNumber { counter-increment: page; }
+		#pageNumber:after { content: counter(page); }​
+  </style>
+  <!-- <link href="images/favicon.ico" rel="shortcut icon"> -->
+  <%= javascript_include_tag "application" %>
+</head>
+<%= javascript_tag do %>
+  window.searchResultsPageSize = 0;
+  window.terms = [];
+<% end %>
+<body>
+<!-- <div class="container">
+  <div class="content">
+    <div class="row">
+      <div class="span12"> -->
+        <%= yield %>
+      <!-- </div>
+    </div>
+  </div>
+</div> -->
+</body>
+</html>

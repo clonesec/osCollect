@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<title>osCollect Daily Log Counts</title>
+</head>
+<body>
+<%=@user.username%>,
+<br /><br />
+<h2>
+	Daily Log Counts for <%= @log_watcher.name %> Watcher
+	&nbsp;&nbsp;
+	<%= @start_time %>
+	&nbsp;-&nbsp;
+	<%= @end_time %>
+</h2>
+<br /><br />
+<table width="50%" cellpadding="2" cellspacing="0" border="1" class="display table table-striped table-bordered">
+  <thead>
+    <th>IP</th>
+    <th>hostname</th>
+    <th>count</th>
+    <th> </th>
+  </thead>
+  <tbody>
+		<% @watchers.each do |ip, hostname_count| %>
+				<tr>
+					<td><%= ip %></td>
+					<td><%= hostname_count[0] %></td>
+					<td style="text-align:right"><%= number_with_delimiter(hostname_count[1]) %></td>
+					<td>
+						<% if hostname_count[1] <= 0 %>
+								***not sending***
+						<% end %>
+					</td>
+				</tr>
+		<% end %>
+  </tbody>
+</table>
+</body>
+</html>

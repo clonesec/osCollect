@@ -1,0 +1,53 @@
+<div class="widget portlet well well-small ui-widget ui-widget-content ui-corner-all" id="widget-span-3" data-widget-id="<%=chart_id%>" style="background-color:#fff">
+  <div class="portlet-header ui-widget-header ui-corner-all">
+    <span style="margin-left: 7px"><%=chart_div_name%></span>
+  </div>
+  <div class="portlet-content">
+    <div id='<%=chart_div_name%>'></div>
+  </div>
+</div>
+
+<%# note: using the package 'charteditor' will automatically load the appropriate
+          chart drawing packages, even though we are not using the editor here:  %>
+<script type="text/javascript">google.load('visualization', '1.1', {packages: ['charteditor']});</script>
+<script type='text/javascript'>
+$(document).ready(function() {
+  var noChartErrors = true;
+  var wrapper = null;
+  var chart_type = "<%=chart_type.blank? ? 'Table' : chart_type%>";
+  var chart_json_serialized = <%=chart_json_serialized.blank? ? 'null' : chart_json_serialized%>;
+  if ( (chart_json_serialized == null) || (typeof chart_json_serialized === 'undefined') ) {
+console.log('undefined chart json, bad!');
+    wrapper = new google.visualization.ChartWrapper({
+      chartType: chart_type,
+      chartName: "ignore this",
+      options: {
+        title: '<%=escape_javascript(chart_title)%>',
+        hAxis: {title: '<%=source_name%>.<%=source_field%>'},
+        is3D: true,
+        colors: ['teal','tomato','cornflowerblue','darkorange','green','blue','brown','red'],
+        chartArea: {width:'auto', height:'auto'},
+        sortColumn: 1, sortAscending: false, page: 'enable', pageSize: 10
+      },
+      containerId: '<%=chart_div_name%>'
+    });
+    }
+  else {
+console.log('found chart json, ok.');
+    var chart_json_serialized = jQuery.parseJSON('<%=chart_json_serialized%>');
+    var wrapper = new google.visualization.ChartWrapper(chart_json_serialized);
+    wrapper.setChartName("ignore this");
+  }
+console.log('wrapper:');
+console.log(wrapper);
+  google.visualization.events.addListener(wrapper, 'error', function errorHandler(e) {
+    noChartErrors = false;
+    console.log(noChartErrors);
+    console.log(e.id);
+    console.log(e.message);
+  });
+  var data = google.visualization.arrayToDataTable(<%=chart_results%>);
+  wrapper.setDataTable(data);
+  wrapper.draw(data);
+});
+</script>

@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>Pagebreak for PDFs</title>
+	<link rel="stylesheet" type="text/css" media="print" href="bootstrap.min.css">
+  <style type="text/css" media="print">
+    div.pagebreak {
+      page-break-before: always;
+    }
+		body {
+			counter-reset: page 0; 
+			margin: 0.3in;
+			padding: 0.2in;
+		}
+		/* table { page-break-inside: auto; } */
+		div.header {
+			font-size: 0.2in;
+			padding-top: 0.3in;
+			padding-bottom: 0.1in;
+		}
+		#pageNumber { counter-increment: page; }
+		#pageNumber:after { content: counter(page); }​
+  </style>
+</head>
+<body>
+<!-- cover page -->
+<div class="header">
+	<span>Nov. 15, 2012 Report One</span>
+	<span class="pull-right">page <span id="pageNumber"></span></span>
+</div>
+<p>
+	Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+<h3>Sections:</h3>
+<ol>
+	<li>Chart One</li>
+	<li>Chart Two</li>
+	<li>Search One</li>
+</ol>
+
+<!-- 
+	notes: 
+	1. each chart is a page
+	2. each search and it's results are multiple pages,
+	   where each page is a header and a table of up to 8 rows
+-->
+<!-- repeated content pages: -->
+<div class="pagebreak"></div>
+<div class="header">
+	<span>Nov. 15, 2012 Report One: chart one</span>
+	<span class="pull-right">page <span id="pageNumber"></span></span>
+</div>
+<br />
+<p>
+	(1) Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<div class="pagebreak"></div>
+<div class="header">
+	<span>Nov. 15, 2012 Report One: chart two</span>
+	<span class="pull-right">page <span id="pageNumber"></span></span>
+</div>
+<br />
+<p>
+	(2) Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
+</p>
+
+<!-- example search/results: -->
+<div class="pagebreak"></div>
+<div class="header">
+	<span>Nov. 15, 2012 Report One: search one</span>
+	<span class="pull-right">page <span id="pageNumber"></span></span>
+</div>
+<br />
+<table cellpadding="0" cellspacing="0" border="0" class="print table table-striped table-bordered" id="logs">
+  <thead>
+    <th>timestamp</th>
+    <th>log msg and fields</th>
+  </thead>
+  <tbody>
+		<!-- render was here -->
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    1-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    2-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    3-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    4-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    5-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    6-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    7-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    8-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+  </tbody>
+</table>
+
+<div class="pagebreak"></div>
+<div class="header">
+	<span>Nov. 15, 2012 Report One: search one</span>
+	<span class="pull-right">page <span id="pageNumber"></span></span>
+</div>
+<br />
+<table cellpadding="0" cellspacing="0" border="0" class="print table table-striped table-bordered" id="logs">
+  <thead>
+    <th>timestamp</th>
+    <th>log msg and fields</th>
+  </thead>
+  <tbody>
+		<!-- render was here -->
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    9-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    10-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    11-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    12-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    13-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    14-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    15-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+		<tr>
+		  <td>2012/10/31 21:33:11 Wed</td>
+		  <td>
+		    16-1102: Security policies were propagated with warning. 0x4b8 : An extended error has occurred. For best results in resolving this event, log on with a non-administrative account and search http://support.microsoft.com for "Troubleshooting Event 1102's". 
+		    <br />
+		    <div style="margin-top:5px">
+		      host=127.0.0.1 program=scecli log_source=WINDOWS eventid=1102 source=Security policies were propagated with warning. 0x4b8 node=Willow (appsudo.com) docid=706420
+		    </div>
+		  </td>
+		</tr>
+  </tbody>
+</table>
+
+</body>
+</html>

@@ -1,0 +1,173 @@
+<%#
+see: https://developers.google.com/chart/image/docs/making_charts?hl=ja
+	Google Chart Usage Policy
+		There's no limit to the number of calls per day you can make to the Google Chart API. 
+		However, we reserve the right to block any use that we regard as abusive.
+%>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<h2><%=@dashboard.name%></h2>
+<script type="text/javascript">
+	var widgetData = {};
+</script>
+<div id="sdashboard-container" style="margin-left:100px; margin-right:100px">
+<% 
+dashboard_json = ""
+@charts.each do |chart|
+	# result = []
+	# if chart.chart_library == 'flotr2' && ['tablechart', 'table'].include?(chart.chart_type.downcase)
+	# 	# ignore
+	# else
+	# 	result << [escape_javascript(chart.chart_title), 'count']
+	# end
+	# merge_groupby_counts = Hash.new(0)
+	# chart.results.group_by_results.each do |groupby_count|
+	#   merge_groupby_counts[escape_javascript(groupby_count[1])] += groupby_count[2]
+	# end
+	# result += merge_groupby_counts.collect { |key, value| [key, value] }
+	# count = chart.results.group_by_total
+	# if chart.chart_library == 'gchart'
+	# 	chart_results = (count <= 0) ? '[]' : raw(result)
+	# else
+	# 	chart_results = (count <= 0) ? '[]' : result
+	# end
+	# chart_search = chart.search
+	dashboard_json += set_dashboardJSON(chart.name, chart.widget_id, "widget_#{chart.widget_id}", chart.id)
+	if chart.chart_library == 'gchart'
+		if @total <= 0
+			chart_results = '[]'
+		else
+			values_and_hits = ["[\"#{escape_javascript(chart.chart_title)}\", \"count\"]"]
+			@all_results.each do |value_hits|
+			  values_and_hits << "[\"#{value_hits.value}\", #{value_hits.hits}]"
+			end
+			chart_results = raw('[' + values_and_hits.join(',') + ']')
+		end
+	else
+		chart_results = (@total <= 0) ? '[]' : @all_results
+	end
+	if @total <= 0
+	%>
+			<div id="<%="widget_#{chart.widget_id}"%>" style="height:200px; width:300px;">
+			  <div class="alert alert-error">
+			    <h5>no results found for this chart</h5>
+			  </div>
+			</div>
+	<% else %>
+			<% if chart.chart_library == 'gchart' %>
+			     <%= render 'chart',
+								widget_id: 							chart.widget_id,
+								chart_id:               chart.id,
+								chart_json_serialized:  raw(chart.chart_json_serialized),
+								chart_type:             chart.chart_type,
+								chart_title:            chart.chart_title,
+								# make chart div's unique to avoid issues with Google Chart Tools and duplicate charts:
+								chart_div_name:         "widget_#{chart.widget_id}",
+								source_name:            DataSourceField.find(chart.group_by).data_source.name,
+								source_field:           DataSourceField.find(chart.group_by).name,
+								chart_results:          chart_results
+			     %>
+			<% else
+					partial_page = nil
+					case
+					when ['piechart', 'pie'].include?(chart.chart_type.downcase)
+						partial_page = 'flotr2/pie'
+					when ['columnchart', 'column'].include?(chart.chart_type.downcase)
+						partial_page = 'flotr2/column'
+					when ['barchart', 'bar'].include?(chart.chart_type.downcase)
+						partial_page = 'flotr2/bar'
+					when ['linechart', 'line'].include?(chart.chart_type.downcase)
+						partial_page = 'flotr2/line'
+					when ['tablechart', 'table'].include?(chart.chart_type.downcase)
+						# sort by count:
+						# chart_results.sort!
+						partial_page = 'flotr2/table'
+					else %>
+				    <div class="alert alert-info">
+				      <h5>The chart type of "<em><%= chart.chart_type.downcase %></em>" is unknown to Flotr2, please contact an admin.</h5>
+				    </div>
+					<% end %>
+					<% unless partial_page.blank? %>
+	    				<%= render partial_page,
+									chart: 						chart,
+									chart_results: 		chart_results,
+									chart_div_name: 	"widget_#{chart.widget_id}",
+									chart_is_widget: 	true,
+									chart_width: 			'320px',
+									chart_height: 		'200px',
+									source_name: 			DataSourceField.find(chart.group_by).data_source.name,
+									source_field: 		DataSourceField.find(chart.group_by).name
+							%>
+					<% end %>
+			<% end %>
+	<% end %>
+<% end %>
+</div>
+<%= javascript_tag do %>
+$(function() {
+
+	var dashboard_id = <%=@dashboard.id%>;
+
+	var dashboardJSON = [];
+  <%= raw(dashboard_json) %>
+
+	// initialize dashboard:
+	$("#dashboard").sDashboard({
+		dashboardData : dashboardJSON
+	});
+
+	// widget order has changed event:
+	$("#dashboard").bind("sdashboardorderchanged", function(e, data) {
+		$.gritter.add({
+			position: 'bottom-left',
+			title : 'Widgets moved:',
+			time : 2500,
+			text : 'Standby ... remembering the new order.'
+		});
+		// if (console) {
+		// 	console.log("sorted array:");
+		// 	console.log(data.sortedDefinitions);
+		// };
+		var reordered_widgets = [];
+		for (widget in data.sortedDefinitions) {
+			// console.log(data.sortedDefinitions[widget].widgetId);
+			reordered_widgets.push(data.sortedDefinitions[widget].widgetId);
+		};
+		// console.log('*** reordered_widgets:');
+		// console.log(reordered_widgets);
+		// post new widget order:
+		$.ajax({
+		  type: "POST",
+		  url: '/update_widget_order/' + dashboard_id,
+		  data: { widgets: JSON.stringify(reordered_widgets) }
+		});
+	});
+
+	// Feb 2013: can't make this work for GCharts:
+	// widget maximized event:
+	// $("#dashboard").bind("sdashboardwidgetmaximized", function(e,data) {
+	// 	var widgetDefinition = data.widgetDefinition;
+	// 	//		var wrapper = window['wrapper' + widgetDefinition.widgetId];
+	// 	//console.log('wrapper:');
+	// 	//console.log(wrapper);
+	// 	console.log('widgetData[wrapper7]:');
+	// 	console.log(widgetData['wrapper7']);
+	// 	console.log('widgetData:');
+	// 	console.log(widgetData);
+	// 	// wrapper + data needed for redraw!
+	// 	// $("#wrapper_"+widgetDefinition.widgetId).prop("width", "1000px");
+	// 	// $("#wrapper_"+widgetDefinition.widgetId).prop("height", "1000px");
+	// 	// widgetData['wrapper'+widgetDefinition.widgetId].setDataTable(widgetData['data'+widgetDefinition.widgetId]);
+	// 	// widgetData['wrapper'+widgetDefinition.widgetId].draw(widgetData['data'+widgetDefinition.widgetId], {width: 800, height: 600});
+  // 
+	// 	//		google.visualization.events.trigger(wrapper, redrawChart, event_args)
+	// 	//		window['wrapper' + widgetDefinition.widgetId].draw(data, {width: 700, height: 500});
+	// 	//console.log('widgetDefinition:');
+	// 	//console.log(widgetDefinition);
+	// 	//console.log('widgetDefinition.widgetContent.selector:');
+	// 	//console.log(widgetDefinition.widgetContent.selector);
+	// });
+
+});
+<% end %>
+
+<ul id="dashboard"></ul>

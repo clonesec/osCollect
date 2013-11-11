@@ -1,0 +1,67 @@
+<div id="<%=chart_div_name%>" style="height:<%=chart_height%>; width:<%=chart_width%>;"></div>
+<% 	# e.g. [["service_control_manager", 195874], ["url", 196563], ["unknown", 711], ["windows", 1]]
+		label_data = []
+		labels = []
+		chart_results.each_with_index do |result, x|
+			labels << "#{"'"+result.value+"'"}"
+		  label_data << "{data : [[#{result.hits}, #{x}]]}" # horizontal
+		end
+		# label_data.sort!
+		title = chart_is_widget ? 'null' : "'#{chart.chart_title}'"
+		show_legend = chart_is_widget ? 'false' : 'true'
+%>
+<script type='text/javascript'>
+jQuery(document).ready(function() {
+	(function basic_bars(container, horizontal) {
+		var labels = [<%= raw(labels.join(',')) %>];
+	  var horizontal = true;
+	  Flotr.draw(container,
+			[<%= raw(label_data.join(',')) %>],
+	    {
+				colors : ["#3366CC","#DC3912","#FF9900","#109618","#990099"],
+				title : <%= raw(title) %>,
+		    HtmlText : false,
+	      bars : {
+	        barWidth : 0.5,
+	        show : true,
+	        horizontal : horizontal,
+	        shadowSize : 0,
+					fillOpacity : 1 // solid fill no gradient
+	      },
+	      mouse : {
+					fillOpacity : 0,
+					track : true,
+					trackDecimals : 0,
+					trackFormatter : function(obj){ return obj.x; },
+		      position : 'ne',
+	        relative : true
+	      },
+	      yaxis : {
+	        min : null,
+	        max : null,
+					autoscale : false,
+					margin : true,
+	        autoscaleMargin : 8,
+					noTicks : 3,
+					tickDecimals: 0,
+	      	tickFormatter : 
+						function(n){
+							// tick_label = n - 1;
+							tick_label = n;
+							if (tick_label >= 0) {
+								// return labels[n-1];
+								return labels[n];
+							} else {
+								return '';
+							}
+						}
+	      },
+	      xaxis : {
+					tickDecimals: 0,
+					title : '<%=source_name%>.<%=source_field%>'
+	      }  
+	    }
+	  );
+	})(document.getElementById("<%=chart_div_name%>"));
+});
+</script>

@@ -1,0 +1,12 @@
+<div>
+  <button class="btn btn-info" data-toggle="collapse" data-target="#<%=node_name%>_memory">memory</button>
+  <button class="btn btn-info" data-toggle="collapse" data-target="#<%=node_name%>_disk">disk</button>
+</div>
+<div style="margin-top:10px">
+  <div id="<%=node_name%>_memory" class="collapse in">
+    <pre><%= mem %></pre>
+  </div>
+  <div id="<%=node_name%>_disk" class="collapse in">
+    <pre><%= disk %></pre>
+  </div>
+</div>

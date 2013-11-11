@@ -1,0 +1,55 @@
+<%= javascript_tag do %>
+  window.searchResultsPageSize = "<%= current_user.blank? ? 10 : current_user.search_results_page_size %>";
+  window.terms = <%= @search.highlights.blank? ? [] : raw(@search.highlights.to_json) %>;
+<% end %>
+
+<%= render 'form', datasources: @ds, datafieldoperators: @dfo %>
+
+<% unless @all_results.nil? %>
+  <div class="alert alert-success">
+    <a class="close" data-dismiss="alert">×</a>
+    <%= number_with_delimiter(@all_results["response"]["numFound"])%> matching logs found in <%=@elapsed%> seconds (only <%=@all_results["responseHeader"]["params"]["rows"]%> logs are displayed).
+		<br />
+		solr query:
+		<br />
+		<!-- <div style="font-size:15px"><%#=@all_results["responseHeader"]["params"]["q"]%></div> -->
+		<div style="font-size:15px"><%=@all_results["responseHeader"]["params"]%></div>
+  </div>
+  <%# unless @all_results.errors.blank? %>
+		  <%# @all_results.errors.each do |error| %>
+		    <!-- <div class="alert alert-error">
+					<%#= error %>
+		    </div> -->
+		  <%# end %>
+  <%# end %>
+  <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped table-bordered" id="logs">
+    <thead>
+      <th>timestamp</th>
+      <th>log msg and fields</th>
+    </thead>
+    <tbody>
+      <% @all_results["response"]["docs"].each do |doc| %>
+					<tr>
+					  <td style="white-space:nowrap">
+							<%= Time.parse(doc["timestamp"]).utc.strftime('%Y/%m/%d %H:%M:%S %a') %>
+						</td>
+					  <td>
+					    <%= doc["logtext"] %>
+					    <div style="margin-top:5px">
+					      <em style="color:gray">host=</em><%= doc["host"] %>&nbsp;
+					      <em style="color:gray">program=</em><%= doc["program"] %>&nbsp;
+					      <em style="color:gray">source=</em><%= doc["source"] %>&nbsp;
+								<br />
+								<% doc.each do |k,v| %>
+										<% next if ['timestamp','logtext','host','host_l','program','program_t','source','source_t','id','_version_','srcip_t','dstip_t'].include?(k) %>
+										<%# assumption is that only IPv4 fields end in '_l' (long int's):%>
+										<% next if k[-2..-1] == '_l' %>
+										<em style="color:gray"><%= k[0..-3].gsub(doc["source"].gsub(' ','_')+'_','') %>=</em><%= v %>&nbsp;
+								<% end %>
+					    </div>
+					  </td>
+					</tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

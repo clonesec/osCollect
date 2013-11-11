@@ -1,0 +1,52 @@
+<div class="container">
+  <div class="span5 content" style="margin-left:-100px">
+    <h1 style="margin-left:35px; margin-bottom:20px">osCollect</h1>
+    <div class="row">
+      <div class="login-form">
+        <% unless flash.empty? %>
+            <div class="alert alert-error">
+              <% flash.each do |name, msg| %>
+                <%= content_tag :div, msg, class: "flash flash_#{name}" %>
+              <% end %>
+            </div>
+        <% end %>
+        <% if @user.errors.any? %>
+          <div class="error_messages alert alert-error">
+            <ul>
+              <% for message in @user.errors.full_messages %>
+                <li><%= message %></li>
+              <% end %>
+            </ul>
+          </div>
+        <% end %>
+        <%= form_for @user, url: password_reset_path(params[:id]) do |f| %>
+          <fieldset>
+            <div class="control-group">
+              <label class="control-label">Password</label>
+              <div class="controls">
+                <%= f.password_field :password, class: "input-xlarge", autocomplete: "off" %>
+              </div>
+            </div>
+            <div class="control-group">
+              <label class="control-label">Password Confirmation</label>
+              <div class="controls">
+                <%= f.password_field :password_confirmation, class: "input-xlarge", autocomplete: "off" %>
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Reset Password</button>
+          </fieldset>
+        <% end %>
+      </div>
+    </div>
+    <div class="login_footer">
+      <center>
+        2012 
+        <% if APP_CONFIG[:show_versions_and_limits] %>
+            &nbsp;-&nbsp;
+            version: <%= APP_CONFIG[:version] %>
+            &nbsp;&nbsp;
+        <% end %>
+      </center>
+    </div>
+  </div>
+</div>

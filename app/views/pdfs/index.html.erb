@@ -1,0 +1,38 @@
+<h2>PDF Reports</h2>
+<% if @pdfs.blank? %>
+		<h4>No PDF's found!</h4>
+<% else %>
+  <span style="float:right"><%= page_entries_info @pdfs %></span>
+  <br />
+  <table class="table table-striped">
+    <thead>
+      <th>PDF's</th>
+      <th>status</th>
+      <th>last run</th>
+      <th></th>
+    </thead>
+    <tbody>
+	    <% @pdfs.each do |pdf| %>
+	      <tr>
+	      <td>
+          <% if (pdf.user_id == current_user.id) && (pdf.run_status == 'done') %>
+              <%= link_to pdf.file_name, pdf_path(id: pdf.id), style: "text-decoration:none" %>
+          <% else %>
+              <%= pdf.file_name %>
+          <% end %>
+          <div class="alert alert-info">
+	          report:<br />
+						<%= link_to pdf.report.name, edit_report_path(pdf.report), style: "text-decoration:none" %>
+	        </div>
+	      </td>
+	      <td><%= pdf.run_status %></td>
+	      <td><%= pdf.last_run %></td>
+	      <td>
+					<%= link_to 'delete', pdf_path(id: pdf.id), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+				</td>
+	      </tr>
+	    <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @pdfs, inner_window: 2, style: 'font-size:small' %>
+<% end %>

@@ -1,0 +1,29 @@
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown">Presentations<b class="caret"></b></a>
+  <ul class="dropdown-menu">
+    <li class="dropdown-submenu">
+      <%= link_to "Charts", charts_list_path %>
+      <ul class="dropdown-menu">
+        <li><%= link_to 'List', charts_list_path %></li>
+        <li><%= link_to 'New', charts_path %></li>
+      </ul>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-submenu">
+      <%= link_to "Dashboards", dashboards_path %>
+      <ul class="dropdown-menu">
+        <li><%= link_to 'List', dashboards_path %></li>
+        <li><%= link_to 'New', new_dashboard_path %></li>
+      </ul>
+    </li>
+    <li class="divider"></li>
+    <li class="dropdown-submenu">
+      <%= link_to "Reports", reports_path %>
+      <ul class="dropdown-menu">
+        <li><%= link_to 'List', reports_path %></li>
+        <li><%= link_to 'New', new_report_path %></li>
+		    <li><%= link_to 'PDFs', pdfs_path %></li>
+      </ul>
+    </li>
+  </ul>
+</li>

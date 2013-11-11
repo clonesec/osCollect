@@ -1,0 +1,598 @@
+---
+0:
+  0:
+    :source: any
+    :name: logtext
+    :solr_name: logtext
+    :ip: 
+  1:
+    :source: any
+    :name: timestamp
+    :solr_name: timestamp
+    :ip: 
+  2:
+    :source: any
+    :name: host
+    :solr_name: host
+    :ip: IPv4
+  3:
+    :source: any
+    :name: program
+    :solr_name: program
+    :ip: 
+  4:
+    :source: any
+    :name: source
+    :solr_name: source
+    :ip: 
+20:
+  5:
+    :source: bro conn
+    :name: srcip
+    :solr_name: bro_conn_srcip
+    :ip: IPv4
+  6:
+    :source: bro conn
+    :name: srcport
+    :solr_name: bro_conn_srcport_i
+    :ip: 
+  7:
+    :source: bro conn
+    :name: dstip
+    :solr_name: bro_conn_dstip
+    :ip: IPv4
+  8:
+    :source: bro conn
+    :name: dstport
+    :solr_name: bro_conn_dstport_i
+    :ip: 
+  9:
+    :source: bro conn
+    :name: proto
+    :solr_name: bro_conn_proto_t
+    :ip: 
+14:
+  5:
+    :source: bro dns
+    :name: srcip
+    :solr_name: bro_dns_srcip
+    :ip: IPv4
+  6:
+    :source: bro dns
+    :name: srcport
+    :solr_name: bro_dns_srcport_i
+    :ip: 
+  7:
+    :source: bro dns
+    :name: dstip
+    :solr_name: bro_dns_dstip
+    :ip: IPv4
+  8:
+    :source: bro dns
+    :name: dstport
+    :solr_name: bro_dns_dstport_i
+    :ip: 
+  9:
+    :source: bro dns
+    :name: proto
+    :solr_name: bro_dns_proto_t
+    :ip: 
+  11:
+    :source: bro dns
+    :name: hostname
+    :solr_name: bro_dns_hostname_t
+    :ip: 
+  12:
+    :source: bro dns
+    :name: answer
+    :solr_name: bro_dns_answer_t
+    :ip: 
+19:
+  5:
+    :source: bro http
+    :name: srcip
+    :solr_name: bro_http_srcip
+    :ip: IPv4
+  6:
+    :source: bro http
+    :name: srcport
+    :solr_name: bro_http_srcport_i
+    :ip: 
+  7:
+    :source: bro http
+    :name: dstip
+    :solr_name: bro_http_dstip
+    :ip: IPv4
+  8:
+    :source: bro http
+    :name: dstport
+    :solr_name: bro_http_dstport_i
+    :ip: 
+  9:
+    :source: bro http
+    :name: status_code
+    :solr_name: bro_http_status_code_i
+    :ip: 
+  10:
+    :source: bro http
+    :name: content_length
+    :solr_name: bro_http_content_length_i
+    :ip: 
+  11:
+    :source: bro http
+    :name: method
+    :solr_name: bro_http_method_t
+    :ip: 
+  12:
+    :source: bro http
+    :name: site
+    :solr_name: bro_http_site_t
+    :ip: 
+  13:
+    :source: bro http
+    :name: uri
+    :solr_name: bro_http_uri_t
+    :ip: 
+  14:
+    :source: bro http
+    :name: referer
+    :solr_name: bro_http_referer_t
+    :ip: 
+  15:
+    :source: bro http
+    :name: user_agent
+    :solr_name: bro_http_user_agent_t
+    :ip: 
+15:
+  5:
+    :source: bro notice
+    :name: srcip
+    :solr_name: bro_notice_srcip
+    :ip: IPv4
+  6:
+    :source: bro notice
+    :name: srcport
+    :solr_name: bro_notice_srcport_i
+    :ip: 
+  7:
+    :source: bro notice
+    :name: dstip
+    :solr_name: bro_notice_dstip
+    :ip: IPv4
+  8:
+    :source: bro notice
+    :name: dstport
+    :solr_name: bro_notice_dstport_i
+    :ip: 
+  11:
+    :source: bro notice
+    :name: notice_type
+    :solr_name: bro_notice_notice_type_t
+    :ip: 
+  12:
+    :source: bro notice
+    :name: notice_msg
+    :solr_name: bro_notice_notice_msg_t
+    :ip: 
+16:
+  5:
+    :source: bro smtp
+    :name: srcip
+    :solr_name: bro_smtp_srcip
+    :ip: IPv4
+  6:
+    :source: bro smtp
+    :name: srcport
+    :solr_name: bro_smtp_srcport_i
+    :ip: 
+  7:
+    :source: bro smtp
+    :name: dstip
+    :solr_name: bro_smtp_dstip
+    :ip: IPv4
+  8:
+    :source: bro smtp
+    :name: dstport
+    :solr_name: bro_smtp_dstport_i
+    :ip: 
+  11:
+    :source: bro smtp
+    :name: server
+    :solr_name: bro_smtp_server_t
+    :ip: 
+  12:
+    :source: bro smtp
+    :name: from
+    :solr_name: bro_smtp_from_t
+    :ip: 
+  13:
+    :source: bro smtp
+    :name: to
+    :solr_name: bro_smtp_to_t
+    :ip: 
+  14:
+    :source: bro smtp
+    :name: subject
+    :solr_name: bro_smtp_subject_t
+    :ip: 
+  15:
+    :source: bro smtp
+    :name: last_reply
+    :solr_name: bro_smtp_last_reply_t
+    :ip: 
+  16:
+    :source: bro smtp
+    :name: path
+    :solr_name: bro_smtp_path_t
+    :ip: 
+17:
+  5:
+    :source: bro smtp entities
+    :name: srcip
+    :solr_name: bro_smtp_entities_srcip
+    :ip: IPv4
+  6:
+    :source: bro smtp entities
+    :name: srcport
+    :solr_name: bro_smtp_entities_srcport_i
+    :ip: 
+  7:
+    :source: bro smtp entities
+    :name: dstip
+    :solr_name: bro_smtp_entities_dstip
+    :ip: IPv4
+  8:
+    :source: bro smtp entities
+    :name: dstport
+    :solr_name: bro_smtp_entities_dstport_i
+    :ip: 
+  9:
+    :source: bro smtp entities
+    :name: content_len
+    :solr_name: bro_smtp_entities_content_len_i
+    :ip: 
+  11:
+    :source: bro smtp entities
+    :name: filename
+    :solr_name: bro_smtp_entities_filename_t
+    :ip: 
+  12:
+    :source: bro smtp entities
+    :name: mime_type
+    :solr_name: bro_smtp_entities_mime_type_t
+    :ip: 
+  13:
+    :source: bro smtp entities
+    :name: md5
+    :solr_name: bro_smtp_entities_md5_t
+    :ip: 
+  14:
+    :source: bro smtp entities
+    :name: extraction_file
+    :solr_name: bro_smtp_entities_extraction_file_t
+    :ip: 
+  15:
+    :source: bro smtp entities
+    :name: excerpt
+    :solr_name: bro_smtp_entities_excerpt_t
+    :ip: 
+18:
+  5:
+    :source: bro ssl
+    :name: srcip
+    :solr_name: bro_ssl_srcip
+    :ip: IPv4
+  6:
+    :source: bro ssl
+    :name: srcport
+    :solr_name: bro_ssl_srcport_i
+    :ip: 
+  7:
+    :source: bro ssl
+    :name: dstip
+    :solr_name: bro_ssl_dstip
+    :ip: IPv4
+  8:
+    :source: bro ssl
+    :name: dstport
+    :solr_name: bro_ssl_dstport_i
+    :ip: 
+  9:
+    :source: bro ssl
+    :name: expiration
+    :solr_name: bro_ssl_expiration_i
+    :ip: 
+  11:
+    :source: bro ssl
+    :name: hostname
+    :solr_name: bro_ssl_hostname_t
+    :ip: 
+  12:
+    :source: bro ssl
+    :name: subject
+    :solr_name: bro_ssl_subject_t
+    :ip: 
+2:
+  5:
+    :source: firewall access deny
+    :name: proto
+    :solr_name: firewall_access_deny_proto_t
+    :ip: 
+  6:
+    :source: firewall access deny
+    :name: srcip
+    :solr_name: firewall_access_deny_srcip
+    :ip: IPv4
+  7:
+    :source: firewall access deny
+    :name: srcport
+    :solr_name: firewall_access_deny_srcport_i
+    :ip: 
+  8:
+    :source: firewall access deny
+    :name: dstip
+    :solr_name: firewall_access_deny_dstip
+    :ip: IPv4
+  9:
+    :source: firewall access deny
+    :name: dstport
+    :solr_name: firewall_access_deny_dstport_i
+    :ip: 
+  11:
+    :source: firewall access deny
+    :name: o_int
+    :solr_name: firewall_access_deny_o_int_t
+    :ip: 
+  12:
+    :source: firewall access deny
+    :name: i_int
+    :solr_name: firewall_access_deny_i_int_t
+    :ip: 
+  13:
+    :source: firewall access deny
+    :name: access_group
+    :solr_name: firewall_access_deny_access_group_t
+    :ip: 
+3:
+  5:
+    :source: firewall connection end
+    :name: proto
+    :solr_name: firewall_connection_end_proto_t
+    :ip: 
+  6:
+    :source: firewall connection end
+    :name: srcip
+    :solr_name: firewall_connection_end_srcip
+    :ip: IPv4
+  7:
+    :source: firewall connection end
+    :name: srcport
+    :solr_name: firewall_connection_end_srcport_i
+    :ip: 
+  8:
+    :source: firewall connection end
+    :name: dstip
+    :solr_name: firewall_connection_end_dstip
+    :ip: IPv4
+  9:
+    :source: firewall connection end
+    :name: dstport
+    :solr_name: firewall_connection_end_dstport_i
+    :ip: 
+  10:
+    :source: firewall connection end
+    :name: conn_bytes
+    :solr_name: firewall_connection_end_conn_bytes_t
+    :ip: 
+  11:
+    :source: firewall connection end
+    :name: o_int
+    :solr_name: firewall_connection_end_o_int_t
+    :ip: 
+  12:
+    :source: firewall connection end
+    :name: i_int
+    :solr_name: firewall_connection_end_i_int_t
+    :ip: 
+  13:
+    :source: firewall connection end
+    :name: conn_duration
+    :solr_name: firewall_connection_end_conn_duration_t
+    :ip: 
+! '': {}
+8:
+  5:
+    :source: snort
+    :name: sig_priority
+    :solr_name: snort_sig_priority_t
+    :ip: 
+  6:
+    :source: snort
+    :name: proto
+    :solr_name: snort_proto_t
+    :ip: 
+  7:
+    :source: snort
+    :name: srcip
+    :solr_name: snort_srcip
+    :ip: IPv4
+  8:
+    :source: snort
+    :name: srcport
+    :solr_name: snort_srcport_i
+    :ip: 
+  9:
+    :source: snort
+    :name: dstip
+    :solr_name: snort_dstip
+    :ip: IPv4
+  10:
+    :source: snort
+    :name: dstport
+    :solr_name: snort_dstport_i
+    :ip: 
+  11:
+    :source: snort
+    :name: sig_sid
+    :solr_name: snort_sig_sid_t
+    :ip: 
+  12:
+    :source: snort
+    :name: sig_msg
+    :solr_name: snort_sig_msg_t
+    :ip: 
+  13:
+    :source: snort
+    :name: sig_classification
+    :solr_name: snort_sig_classification_t
+    :ip: 
+12:
+  5:
+    :source: ssh access deny
+    :name: port
+    :solr_name: ssh_access_deny_port_i
+    :ip: 
+  11:
+    :source: ssh access deny
+    :name: authmethod
+    :solr_name: ssh_access_deny_authmethod_t
+    :ip: 
+  12:
+    :source: ssh access deny
+    :name: user
+    :solr_name: ssh_access_deny_user_t
+    :ip: 
+  13:
+    :source: ssh access deny
+    :name: device
+    :solr_name: ssh_access_deny_device_t
+    :ip: 
+  14:
+    :source: ssh access deny
+    :name: service
+    :solr_name: ssh_access_deny_service_t
+    :ip: 
+11:
+  5:
+    :source: ssh login
+    :name: port
+    :solr_name: ssh_login_port_i
+    :ip: 
+  11:
+    :source: ssh login
+    :name: authmethod
+    :solr_name: ssh_login_authmethod_t
+    :ip: 
+  12:
+    :source: ssh login
+    :name: user
+    :solr_name: ssh_login_user_t
+    :ip: 
+  13:
+    :source: ssh login
+    :name: device
+    :solr_name: ssh_login_device_t
+    :ip: 
+  14:
+    :source: ssh login
+    :name: service
+    :solr_name: ssh_login_service_t
+    :ip: 
+13:
+  11:
+    :source: ssh logout
+    :name: user
+    :solr_name: ssh_logout_user_t
+    :ip: 
+7:
+  5:
+    :source: url
+    :name: srcip
+    :solr_name: url_srcip
+    :ip: IPv4
+  6:
+    :source: url
+    :name: dstip
+    :solr_name: url_dstip
+    :ip: IPv4
+  7:
+    :source: url
+    :name: status_code
+    :solr_name: url_status_code_i
+    :ip: 
+  8:
+    :source: url
+    :name: content_length
+    :solr_name: url_content_length_i
+    :ip: 
+  9:
+    :source: url
+    :name: country_code
+    :solr_name: url_country_code_i
+    :ip: 
+  11:
+    :source: url
+    :name: method
+    :solr_name: url_method_t
+    :ip: 
+  12:
+    :source: url
+    :name: site
+    :solr_name: url_site_t
+    :ip: 
+  13:
+    :source: url
+    :name: uri
+    :solr_name: url_uri_t
+    :ip: 
+  14:
+    :source: url
+    :name: referer
+    :solr_name: url_referer_t
+    :ip: 
+  15:
+    :source: url
+    :name: user_agent
+    :solr_name: url_user_agent_t
+    :ip: 
+  16:
+    :source: url
+    :name: domains
+    :solr_name: url_domains_t
+    :ip: 
+4:
+  5:
+    :source: windows
+    :name: eventid
+    :solr_name: windows_eventid_i
+    :ip: 
+  11:
+    :source: windows
+    :name: source
+    :solr_name: windows_source_t
+    :ip: 
+  12:
+    :source: windows
+    :name: user
+    :solr_name: windows_user_t
+    :ip: 
+  13:
+    :source: windows
+    :name: field0
+    :solr_name: windows_field0_t
+    :ip: 
+  14:
+    :source: windows
+    :name: type
+    :solr_name: windows_type_t
+    :ip: 
+  15:
+    :source: windows
+    :name: hostname
+    :solr_name: windows_hostname_t
+    :ip: 
+  16:
+    :source: windows
+    :name: category
+    :solr_name: windows_category_t
+    :ip: 

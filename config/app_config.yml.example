@@ -1,0 +1,30 @@
+# this is loaded by: config/initializers/load_app_config.rb
+# usage: APP_CONFIG[:show_versions_and_limits]
+
+production:
+  host: localhost
+  web_server: apache
+  version: 1.0.0
+  show_versions_and_limits: true
+  emails_from: do.not.reply@prod.com
+  per_page: 12
+  max_alert_history: 5000
+  solr_url: http://localhost:8983/solr/collection1
+  # Sharing:
+  share_url: http://localhost:8888/
+  share_api_key: ***have an Admin generate an API key on the Sharing server***
+  # Reports/PDFs config:
+  max_report_history: 5000
+  reports_path: /home/oscollect/apps/oscollect/shared/reports
+  reports_url: oscollect.somedomain.com
+  reports_allowed_ip: ip.of.some.domain
+  phantomjs: /usr/local/bin/phantomjs
+  rasterizejs: /home/cleesmith/apps/oscollect/current/lib/phantomjs/rasterize.js
+  # note: a report may consist of html tables for search results as well
+  #       as google charts which are grouped by search results ... a
+  #       google chart may take many seconds to be rendered, so it may be
+  #       necessary to increase the following if users see unfinished reports:
+  phantomjs_rasterize_page_render_time_out: 10000 # 10,000 ms = 10 sec.s
+  # DEPRECATED Faye provides a pubsub for live logs viewing:
+  faye_js_url: http://appsudo.com:9292/faye.js
+  logs_pubsub_url: http://appsudo.com:9292/faye

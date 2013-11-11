@@ -1,0 +1,154 @@
+@import "twitter/bootstrap/bootstrap";
+
+body {
+  padding-top: 60px;
+}
+
+// span.match { background-color: #F1ED20 }
+strong { background-color: #F1ED20 }
+.highlight { background-color: #F1ED20 }
+
+div.dataTables_length label {
+  float: left;
+  text-align: left;
+}
+
+div.dataTables_length select {
+  width: 75px;
+}
+
+div.dataTables_filter label {
+  float: right;
+}
+div.dataTables_info {
+  padding-top: 8px;
+}
+div.dataTables_paginate {
+  float: right;
+  margin: 0;
+}
+table.table {
+  clear: both;
+  margin-bottom: 6px !important;
+}
+table.table thead .sorting,
+table.table thead .sorting_asc,
+table.table thead .sorting_desc,
+table.table thead .sorting_asc_disabled,
+table.table thead .sorting_desc_disabled {
+  cursor: pointer;
+  *cursor: hand;
+}
+table.table thead .sorting { background: url('/assets/sort_both.png') no-repeat center right; }
+table.table thead .sorting_asc { background: url('/assets/sort_asc.png') no-repeat center right; }
+table.table thead .sorting_desc { background: url('/assets/sort_desc.png') no-repeat center right; }
+table.table thead .sorting_asc_disabled { background: url('/assets/sort_asc_disabled.png') no-repeat center right; }
+table.table thead .sorting_desc_disabled { background: url('/assets/sort_desc_disabled.png') no-repeat center right; }
+table.dataTable th:active {
+  outline: none;
+}
+
+@import "twitter/bootstrap/responsive";
+
+// Set the correct sprite paths
+@iconSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings.png");
+@iconWhiteSpritePath: asset-path("twitter/bootstrap/glyphicons-halflings-white.png");
+
+// cls: previous osCollect:
+// Set the Font Awesome (Font Awesome is default. You can disable by commenting below lines)
+// Note: If you use asset_path() here, your compiled bootstrap_and_overrides.css will not
+//       have the proper paths. So for now we use the absolute path.
+// @fontAwesomeEotPath: asset-path("fontawesome-webfont.eot?v=3.0.2");
+// @fontAwesomeEotPath_iefix: asset-path("fontawesome-webfont.eot?#iefix&v=3.0.2");
+// @fontAwesomeWoffPath: asset-path("fontawesome-webfont.woff?v=3.0.2");
+// @fontAwesomeTtfPath: asset-path("fontawesome-webfont.ttf?v=3.0.2");
+// Font Awesome
+// @import "fontawesome";
+
+// Font Awesome
+@fontAwesomeEotPath: asset-url("fontawesome-webfont.eot");
+@fontAwesomeEotPath_iefix: asset-url("fontawesome-webfont.eot?#iefix");
+@fontAwesomeWoffPath: asset-url("fontawesome-webfont.woff");
+@fontAwesomeTtfPath: asset-url("fontawesome-webfont.ttf");
+@fontAwesomeSvgPath: asset-url("fontawesome-webfont.svg#fontawesomeregular");
+@import "fontawesome/font-awesome";
+
+// Glyphicons
+@import "twitter/bootstrap/sprites.less";
+
+// Your custom LESS stylesheets goes here
+//
+// Since bootstrap was imported above you have access to its mixins which
+// you may use and inherit here
+//
+// If you'd like to override bootstrap's own variables, you can do so here as well
+// See http://twitter.github.com/bootstrap/customize.html#variables for their names and documentation
+//
+// Example:
+// @linkColor: #ff0000;
+
+/******************* dashboard portlets/widgets *****************/
+[contenteditable]:hover:after {
+  content: 'click to edit';
+  font-style: italic;
+  font-size: 12px;
+  font-family: sans-serif;
+  color: #ccc;
+  position: absolute;
+  margin-top: 5px;
+  padding-left: 10px;
+}
+
+[contenteditable]:hover, [contenteditable]:focus {
+  background-color: rgba(100, 100, 100, 0.4);
+  border: 2px dotted rgba(100, 100, 100, 0.9);
+  // compensate padding and border
+  margin-left: -7px;
+  padding: 5px;
+  outline: none;
+}
+
+.portlet {
+  height: 325px;
+  margin: 0px 10px 10px 0px;
+  float: left;
+}
+
+.portlet:first-child { margin-left: 0px !important; }
+
+/* TODO: check why jquery sortable depends on id instead of class here */
+#widget-span-1 { width: 320px; }
+#widget-span-2 { width: 670px; }
+#widget-span-3 { width: 1020px; }
+
+.portlet-header {
+  border-bottom: 1px solid #000000;
+  margin-bottom: 0.2em;
+  padding-bottom: 0.4em;
+  cursor: move;
+  text-transform: uppercase;
+}
+
+.portlet-header .ui-icon {
+  float: right;
+  cursor: pointer;
+  margin-left: 8px;
+}
+
+.portlet-content {
+  padding: 0.4em;
+  margin-top: 1em;
+}
+
+.ui-sortable-placeholder { border: 1px dotted black; visibility: visible !important; height: 325px !important; }
+/*.ui-sortable-placeholder {
+  border: 2px dashed #FFF;
+  visibility: visible !important;
+  height: 325px !important;
+}
+*/
+
+.ui-sortable-placeholder * {
+  visibility: hidden;
+}
+/******************* end: dashboard *****************/

@@ -1,0 +1,16 @@
+<tr>
+  <td><%= log[1] %></td>
+  <td>
+    <%= log[5] %>
+    <br />
+    <div style="margin-top:5px">
+      host=<%= log[2] %>
+      program=<%= log[3] %>
+      log_source=<%= log[4] %>
+      <% log[6..18].each do |l| %>
+          <%=raw(l)%>
+      <% end %>
+      docid=<%=log[0]%>
+    </div>
+  </td>
+</tr>

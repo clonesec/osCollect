@@ -1,0 +1,173 @@
+<!-- cover page -->
+<div class="header">
+	<span><%=@report_time.strftime("%a, %b %d, %Y %H:%M:%S")%> <%=@report.name%></span>
+	<span class="pull-right">page <span id="pageNumber"></span></span>
+</div>
+<h2 style="text-align:center"><%=@report.name%></h2>
+<% description = @report.description.blank? ? "no description found" : @report.description %>
+<p>
+  <blockquote style="margin-top:30px"><pre><%= simple_format(description)%></pre></blockquote>
+</p>
+<h3>Run type: <%=@report_type%></h3>
+<% if @report_type == 'Daily' || @report_type == 'Weekly' %>
+		<h3>Run time range:</h3>
+		<ol>
+			<li>start: <%= @start_time.strftime("%A, %b %-d, %Y %H:%M:%S %Z") %></li>
+			<li>end: <%= @end_time.strftime("%A, %b %-d, %Y %H:%M:%S %Z") %></li>
+		</ol>
+<% end %>
+<h3>Sections:</h3>
+<% if @charts.blank? && @searches.blank? %>
+    <div class="alert alert-error" style="text-align:center; margin-top:50px"><h5>No charts or searches defined for this report!</h5></div>
+<% else %>
+		<h5>Charts:</h5>
+		<ol>
+			<% @report.report_charts.order(position: :asc).each do |report_chart| %>
+				<%# FIXME show search details %>
+				<li><%= report_chart.chart.name %></li>
+			<% end %>
+		</ol>
+		<h5>Searches:</h5>
+		<ol>
+			<% @report.report_searches.order(position: :asc).each do |report_search| %>
+				<%# FIXME show search details %>
+				<li><%= report_search.search.name %></li>
+			<% end %>
+		</ol>
+<% end %>
+<script type='text/javascript' src='https://www.google.com/jsapi'></script>
+<% @charts.each_with_index do |chart, x|
+			if chart.chart_library == 'gchart'
+				if chart.total <= 0
+					chart_results = '[]'
+				else
+					values_and_hits = ["[\"#{escape_javascript(chart.chart_title)}\", \"count\"]"]
+					chart.results.each do |value_hits|
+					  values_and_hits << "[\"#{value_hits.value}\", #{value_hits.hits}]"
+					end
+					chart_results = raw('[' + values_and_hits.join(',') + ']')
+				end
+			else
+				chart_results = (chart.total <= 0) ? '[]' : chart.results
+			end
+      chart_div_name = "#{chart.id}_#{chart.user_id}_#{chart.search_id}"
+      %>
+			<div class="pagebreak"></div>
+			<div class="header">
+				<span><%=@report_time.strftime("%a, %b %d, %Y %H:%M:%S")%> <%=@report.name%></span>
+				<span class="pull-right">page <span id="pageNumber"></span></span>
+			</div>
+			<div style="background-color:#fff; margin-left:5px; margin-right:5px; padding-top:10px; padding-right:5px;">
+				<h2>
+			    <span style="margin-left:15px"><%=x+1%>. chart: <%=chart.name%></span>
+			  </h2>
+	      <% if chart.total > 0 %>
+			  		<div id='<%=chart_div_name%>' style="height:900px; width:1050px;"></div>
+				<% end %>
+			</div>
+      <% if chart.total <= 0 %>
+          <div class="alert alert-error" style="text-align:center; margin-top:50px"><h5>No results found for this chart!</h5></div>
+      <% else %>
+					<% if chart.chart_library == 'gchart' %>
+		          <%= render 'printable_gchart',
+		                chart_id:               chart.id,
+		                chart_json_serialized:  raw(chart.chart_json_serialized),
+		                chart_type:             chart.chart_type,
+		                chart_title:            chart.chart_title,
+		                chart_div_name:         chart_div_name,
+		                source_name:            DataSourceField.find(chart.group_by).data_source.name,
+		                source_field:           DataSourceField.find(chart.group_by).name,
+		                chart_results:          chart_results
+		          %>
+					<% else
+							partial_page = nil
+							case
+							when ['piechart', 'pie'].include?(chart.chart_type.downcase)
+								partial_page = 'flotr2/pie'
+							when ['columnchart', 'column'].include?(chart.chart_type.downcase)
+								partial_page = 'flotr2/column'
+							when ['barchart', 'bar'].include?(chart.chart_type.downcase)
+								partial_page = 'flotr2/bar'
+							when ['linechart', 'line'].include?(chart.chart_type.downcase)
+								partial_page = 'flotr2/line'
+							when ['tablechart', 'table'].include?(chart.chart_type.downcase)
+								partial_page = 'flotr2/table'
+							else %>
+						    <div class="alert alert-info">
+						      <h5>The chart type of "<em><%= chart.chart_type.downcase %></em>" is unknown to Flotr2, please contact an admin.</h5>
+						    </div>
+							<% end %>
+							<% unless partial_page.blank? %>
+			    				<%= render partial_page,
+											chart: 						chart,
+											chart_results: 		chart_results,
+											chart_div_name: 	chart_div_name,
+											chart_is_widget: 	true,
+											chart_width: 			'800px',
+											chart_height: 		'600px',
+											source_name: 			DataSourceField.find(chart.group_by).data_source.name,
+											source_field: 		DataSourceField.find(chart.group_by).name
+									%>
+							<% end %>
+					<% end %>
+      <% end %>
+<% end %>
+<% @searches.each_with_index do |search_section, x| %>
+	<div class="pagebreak"></div>
+	<div class="header">
+		<span><%=@report_time.strftime("%a, %b %d, %Y %H:%M:%S")%> <%=@report.name%></span>
+		<span class="pull-right">page <span id="pageNumber"></span></span>
+	</div>
+	<div style="background-color:#fff; margin-left:5px; margin-right:5px; padding-top:10px; padding-right:5px;">
+		<h2>
+	    <span style="margin-left:15px"><%=x+1%>. search: <%=search_section.search.name%></span>
+	  </h2>
+	</div>
+  <div class="alert alert-success">
+    <%= number_with_delimiter(search_section.results["response"]["numFound"])%> matching logs found (only <%=search_section.results["responseHeader"]["params"]["rows"]%> logs are displayed).
+  </div>
+	<%# FIXME ... handle solr errors %>
+  <%# search_section.results.errors.each do |error| %>
+    <!-- <div class="alert alert-error">
+      <b>Node</b>: <%#= error[0] %> (<%#= error[1] %>)<br />
+      <%#= raw "Error: #{error[3]}<br />" unless error[3].blank? %>
+      <%#= raw "Return code: #{error[4]}<br />" unless error[4].blank? %>
+      <%#= raw "HTTP response code: #{error[5]}<br />" unless error[5].blank? %>
+      <%#= raw "HTTP status: #{error[6]}<br />" unless error[6].blank? %>
+      <%#= raw "<b>Search warnings</b>: <pre>#{error[7]}</pre><br />" unless error[7].blank? %>
+      <%# err = error[8].blank? ? '' : error[8].gsub(': ', ":\n") %>
+      <%#= raw "<b>Search errors</b>: <pre>#{err.to_yaml}</pre>" unless err.blank? %>
+    </div> -->
+  <%# end %>
+  <table cellpadding="0" cellspacing="0" border="0" class="display table table-striped table-bordered">
+    <thead>
+      <th>timestamp</th>
+      <th>log msg and fields</th>
+    </thead>
+    <tbody>
+      <% search_section.results["response"]["docs"].each do |doc| %>
+					<tr>
+					  <td style="white-space:nowrap">
+							<%= Time.parse(doc["timestamp"]).utc.strftime('%Y/%m/%d %H:%M:%S %a') %>
+							<br />
+							<span style="font-size:10px">iso8601=<%=doc["timestamp"]%></span>
+						</td>
+					  <td>
+					    <%= doc["logtext"] %>
+					    <div style="margin-top:5px">
+					      host=<%= doc["host"] %>
+					      program=<%= doc["program"] %>
+					      source=<%= doc["source"] %>
+								<% doc.each do |k,v| %>
+										<% next if ['timestamp','logtext','host','host_l','program','program_t','source','source_t'].include?(k) %>
+										<%# assumption is that only IPv4 fields end in '_l' (long int's):%>
+										<% next if k[-2..-1] == '_l' %>
+										<%= k[0..-3] %>=<%= v %>
+								<% end %>
+					    </div>
+					  </td>
+					</tr>
+      <% end %>
+    </tbody>
+  </table>
+<% end %>

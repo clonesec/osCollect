@@ -1,0 +1,105 @@
+<h2>Charts</h2>
+<% unless @charts.blank? %>
+  <span style="float:right">
+    <%= page_entries_info @charts %>
+  </span>
+  <br />
+  <table class="table table-striped">
+    <thead>
+      <th>name</th>
+      <th>chart/search details</th>
+      <th>updated</th>
+      <th></th>
+    </thead>
+    <tbody>
+      <% @charts.each do |chart| %>
+        <tr>
+          <td width="30%">
+            <%= link_to "#{chart.name}", charts_path(id: chart.id), title: 'edit chart' %>
+            <br />
+						<% if chart.search.blank? %>
+        				<%= link_to 'edit to select a search', charts_path(id: chart.id), class: 'btn btn-warning btn-mini', style: "margin-top:10px", title: "A search needs to be selected for this chart!" %>
+						<% else %>
+            		<%= link_to 'show', chart_path(id: chart.id), class: 'btn btn-primary btn-mini', style: "margin-top:10px" %>
+						<% end %>
+          </td>
+          <td>
+            <div class="alert alert-success">
+              <h5>grouped by:&nbsp;<%=DataSourceField.find(chart.group_by).data_source.name%>.<%=DataSourceField.find(chart.group_by).name%><h5>
+              <h5>chart:&nbsp;<%=chart.chart_type%><h5>
+              <h5>title:&nbsp;<%=chart.chart_title%><h5>
+							<% if chart.search.blank? %>
+	        				<h5><strong>For this chart to be usable a search must be selected!</strong></h5>
+		            	</div>
+							<% else %>
+		              <% unless (chart.search.date_from.blank? && chart.search.date_to.blank?) %>
+		                  <h5>timestamp range:&nbsp;
+		                    <%= "#{chart.search.date_from} #{chart.search.time_from} - #{chart.search.date_to} #{chart.search.time_to}" %>
+		                  </h5>
+		              <% end %>
+		              <% unless (chart.search.host_from.blank? && chart.search.host_to.blank?) %>
+		                  <h5>host IP range:&nbsp;
+		                    <%= "#{chart.search.host_from} - #{chart.search.host_to}" %>
+		                  </h5>
+		              <% end %>
+		              <% unless chart.search.sources.blank? || chart.search.sources.empty? %>
+		                  <h5>log source types:</h5>
+		                  <blockquote>
+		                    <p style="font-size:12px">
+		                      <%= chart.search.source_ids_to_names.join(', ') %>
+		                    </p>
+		                  </blockquote>
+		              <% end %>
+		              <h5>search terms:</h5>
+		              <blockquote>
+		                <p style="font-size:12px">
+		                  <%= chart.search.query.blank? ? '***nothing entered***' : chart.search.query %>
+		                </p>
+		              </blockquote>
+			            </div>
+			            <% unless chart.search.search_fields.blank? %>
+			                <div class="alert" style="margin-top:-15px">
+			                  <h5>+ fields:</h5>
+			                  <blockquote>
+			                    <% chart.search.search_fields.each do |sf| %>
+			                          <%  case sf.and_or
+			                              when 'or'
+			                                ao = "<em>or&nbsp;</em>"
+			                              when 'and'
+			                                ao = "<em>and</em>"
+			                              else
+			                                ao = ''
+			                              end
+			                          %>
+			                          <p style="font-size:12px">
+			                            <%= raw(ao) %>
+			                            <%= DataSource.find(sf.data_source_id).name unless sf.data_source_id.blank? %>.<%= DataSourceField.find(sf.data_source_field_id).name unless sf.data_source_field_id.blank? %><%= DataFieldOperator.find(sf.data_field_operator_id).operator unless sf.data_field_operator_id.blank? %><%= sf.match_or_attribute_value %>
+			                          </p>
+			                    <% end %>
+			                  </blockquote>
+			                </div>
+			            <% end %>
+			          </td>
+							<% end %>
+
+          <td><%= chart.updated_at.utc.strftime("%a, %b %d, %Y %H:%M:%S") %></td>
+          <td width="6%">
+						<% if chart.shared %>
+								<%= link_to 'unshare', share_path(id: chart.id, share_token: chart.shared, type: 'Chart'), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, :class => 'btn btn-danger btn-mini' %>
+								<br /><br />
+			      <% else %>
+								<% if chart.search.blank? %>
+										<%= link_to raw("<del>share</del>"), '#', class: "btn btn-success btn-mini disabled", title: "Can't share an incomplete Chart.  A Search must be selected for this Chart!" %>
+										<br /><br />
+					      <% else %>
+										<%= button_to 'share', shares_path(id: chart.id, type: 'Chart'), class: "btn btn-success btn-mini share-chart" %>
+					      <% end %>
+			      <% end %>
+						<%= link_to 'delete', chart_path(id: chart.id), data: {confirm: "\nAre you sure?\n\n"}, method: :delete, class: 'btn btn-danger btn-mini' %>
+					</td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  <%= will_paginate @charts, inner_window: 2, style: 'font-size:small' %>
+<% end %>

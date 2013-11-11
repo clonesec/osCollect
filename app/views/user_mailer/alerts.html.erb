@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta content="text/html; charset=UTF-8" http-equiv="Content-Type" />
+<title>osCollect Alert</title>
+</head>
+<body>
+<%=@user.username%>,
+
+<p>
+There were <strong><%=number_with_delimiter(@total)%> matches</strong> found during the time period of <br />
+<strong><%=@from_timestamp.strftime("%a, %b %-d, %Y %H:%M:%S")%> to <%=@to_timestamp.strftime("%a, %b %-d, %Y %H:%M:%S")%></strong> <br />
+with a threshold of <%=@threshold_operator%> <%=@alert.threshold_count%> matching logs in <%=@threshold_time%> minutes.
+</p>
+<hr />
+
+<h3>Description:</h3>
+<blockquote>
+	<%= simple_format(@alert.description) %>
+</blockquote>
+<hr />
+
+<h3>Details for search: <%=@search.name%></h3>
+<blockquote>
+	<ul>
+		<li>updated on: <%= @search.updated_at.utc.strftime("%a, %b %d, %Y %H:%M:%S") %></li>
+		<li>host IP range: <%= (@search.host_from.blank? && @search.host_to.blank?) ? "any" : "#{@search.host_from} - #{@search.host_to}" %></li>
+		<li>search query/terms: <%= @search.query.blank? ? "none" : @search.query %></li>
+		<% unless @search.search_fields.blank? %>
+		  	<li><%="+ fields: "%><li>
+				<ul>
+					<% @search.search_fields.each do |sf| %>
+			    		<li><%= raw(sf.and_or) %> <%= DataSource.find(sf.data_source_id).name unless sf.data_source_id.blank? %>.<%= DataSourceField.find(sf.data_source_field_id).name unless sf.data_source_field_id.blank? %><%= DataFieldOperator.find(sf.data_field_operator_id).operator unless sf.data_field_operator_id.blank? %><%= sf.match_or_attribute_value %></li>
+					<% end %>
+				</ul>
+		<% end %>
+	</ul>
+</blockquote>
+<hr />
+
+<h3>Matching Logs</h3>
+<table cellpadding="0" cellspacing="0" border="1">
+  <thead>
+    <th>timestamp</th>
+    <th>log msg and fields</th>
+  </thead>
+  <tbody>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+	<tr><td>date-time</td><td>lots of words about what happened in this log record<br>host=127.0.0.1 program=service_control_manager log_source=WINDOWS eventid=7035 source=NT AUTHORITYSYSTEM node=Willow (appsudo.com) docid=706643</td></tr>
+    <%# @all_results.results.each do |result| %>
+      <%#= render partial: 'log', locals: {log: result} %>
+    <%# end %>
+  </tbody>
+</table>
+</body>
+</html>

@@ -1,0 +1,40 @@
+<% if @error_message %>
+	<div class="alert alert-error">
+		<h3><%= @error_message%></h3>
+	</div>
+<% else %>
+	<div>
+		<h3>
+			Logs by Destination IPs:&nbsp;&nbsp;
+			<small>
+				(
+					<%=number_with_delimiter(@counts.length)%> Destination IPs
+					in
+					<%=number_with_delimiter(@total)%> logs
+				)
+			</small>
+		</h3>
+		<% if @counts.length <= 0 %>
+        <blockquote>
+          <p style="font-size:20px">
+            No data to display
+          </p>
+        </blockquote>
+		<% else %>
+				<table cellpadding="0" cellspacing="0" border="0" class="table table-striped table-bordered" id="facet_table">
+				  <thead>
+				    <th>dstip</th>
+				    <th>count</th>
+				  </thead>
+				  <tbody>
+						<% @counts.each do |c| %>
+							<tr>
+								<td><%= c.value %></td>
+								<td style="text-align:right"><%= number_with_delimiter(c.hits) %></td>
+							</tr>
+						<% end %>
+				  </tbody>
+				</table>
+		<% end %>
+	</div>
+<% end %>

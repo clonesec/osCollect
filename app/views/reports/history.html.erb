@@ -1,0 +1,19 @@
+<h2>Report history for:<br /><%= @report.name %></h2>
+<table class="table table-striped">
+	<thead>
+		<th>Ran at</th>
+		<th>Details</th>
+		<th>Elapsed seconds</th>
+	</thead>
+	<tbody>
+	<% @history.each do |event| %>
+			<tr>
+				<td><%= event.timestamp.utc.strftime("%a, %b %-d, %Y %H:%M:%S") %></td>
+				<td><%= simple_format(event.message) %></td>
+				<td><%= event.elapsed_time %></td>
+			</tr>
+	<% end %>
+	</tbody>
+</table>
+<hr />
+<em style="padding-left:30px; color:e0e0e0">note: only a few days of history are available for viewing.</em>
