@@ -32,6 +32,7 @@ ln -s "${ROOT}/shared/bundled_gems" "vendor/bundle"
 # cls: Nov 2013: do the following by hand:
 # bundle install to shared vendor/bundle ignoring assets+development+test groups:
 # bundle install --deployment --without assets development test
+# *** first, copy database.yml to config/ then:
 # bundle exec rake db:migrate
 # bundle exec rake db:seed
 # bundle exec rake assets:precompile
