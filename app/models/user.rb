@@ -11,9 +11,6 @@ class User < ActiveRecord::Base
 
   has_secure_password
 
-  # attr_accessible :name, :user_ids, :user_tokens, :sentinel_ids
-  # attr_accessible :username, :email, :password, :password_confirmation, :max_search_results, :search_results_page_size, :search_id, :send_weekly_log_counts
-
   validates :email, presence: true, 
             uniqueness: {case_sensitive: false},
             length: {minimum: 3},

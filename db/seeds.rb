@@ -16,32 +16,6 @@ unless found
   SearchType.create! usage_name: 'logcaster'
 end
 
-found = SentinelSearchType.where(name: 'Syslog_Sphinx').first
-unless found
-  SentinelSearchType.create! name: 'Syslog_Sphinx'
-  SentinelSearchType.create! name: 'osProtect_Snort'
-end
-
-found = Sentinel.count > 0
-unless found
-  type_id = SentinelSearchType.where(name: 'Syslog_Sphinx').first.id
-  Sentinel.create!  name:                     'Willow',     # Bristlecone
-                    url_domain_ip:            '127.0.0.1',  # 50.116.50.120
-                    sentinel_search_type_id:  type_id,
-                    url_protocol:             'http',
-                    url_port:                 8080,
-                    info_path:                'info',
-                    info_http_method:         'get',
-                    browse_path:              'browse',
-                    browse_http_method:       'get',
-                    search_path:              'search',
-                    search_http_method:       'post',
-                    groupby_path:             'groupby',
-                    groupby_http_method:      'post',
-                    request_timeout:          10000, # milliseconds
-                    max_concurrent_requests:  12
-end
-
 # i0  i1  i2  i3  i4  i5   s0  s1  s2  s3  s4  s5 <-- syslogs_template
 #  5   6   7   8   9  10   11  12  13  14  15  16 <-- field_order column in fields_classes_map
 found = FieldOrderToSphinxAttr.where(field_order: 16).first
@@ -50,8 +24,6 @@ unless found
   FieldOrderToSphinxAttr.create! field_order:  1, sphinx_attr: 'timestamp'
   FieldOrderToSphinxAttr.create! field_order:  2, sphinx_attr: 'host_id'
   FieldOrderToSphinxAttr.create! field_order:  3, sphinx_attr: 'program_id'
-  # note: data_source is the same as class, and the sentinel will look up
-  #       the classes.class (name) to get the class_id
   FieldOrderToSphinxAttr.create! field_order:  4, sphinx_attr: 'class_id'
   FieldOrderToSphinxAttr.create! field_order:  5, sphinx_attr: 'i0'
   FieldOrderToSphinxAttr.create! field_order:  6, sphinx_attr: 'i1'

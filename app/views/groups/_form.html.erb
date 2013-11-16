@@ -42,51 +42,6 @@
           <% end %>
         </div>
       </div>
-			<!--
-      <div class="control-group">
-        <%# if @group.name && @group.name.downcase == 'admins' %>
-          <label class="control-label" for="input03">&nbsp;</label>
-        <%# else %>
-          <label class="control-label" for="input03">Allowed Nodes</label>
-        <%# end %>
-        <div class="controls">
-          <%# if @group.name && @group.name.downcase == 'admins' %>
-            all Nodes allowed for admins
-          <%# else %>
-            <%#= hidden_field_tag "group[sentinel_ids][]", nil %>
-            <%# Sentinel.all.each do |sentinel| %>
-              <label class="checkbox">
-                <%#= check_box_tag "group[sentinel_ids][]", sentinel.id, @group.sentinel_ids.include?(sentinel.id), id: dom_id(sentinel) %>
-                <%#= sentinel.name %> (<%#= sentinel.url_domain_ip %>)
-              </label>
-            <%# end %>
-          <%# end %>
-        </div>
-      </div>
-			-->
-			<!--
-      <div class="control-group">
-        <%# if @group.name && @group.name.downcase == 'admins' %>
-          <label class="control-label" for="input04">&nbsp;</label>
-        <%# else %>
-          <label class="control-label" for="input04">Denied Host IP's</label>
-        <%# end %>
-        <div class="controls">
-          <%# if @group.name && @group.name.downcase == 'admins' %>
-            all Host IP's allowed for admins
-          <%# else %>
-            <button class="add btn btn-mini" style="margin-top:5px; margin-bottom:5px; text-decoration:none" title="add more denied host IP's">
-              <i class="icon-plus"></i>&nbsp;host IP
-            </button>
-            <div class="items">
-              <%#= f.nested_fields_for :group_excludes do |f|
-                render 'select_chain', f: f
-              end -%>
-            </div>
-          <%# end %>
-        </div>
-      </div>
-			-->
       <div class="control-group">
 				<div class="controls">
 					<em><b>Under development</b>: limit this group of users to certain Host IP's</em>

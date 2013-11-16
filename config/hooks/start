@@ -28,12 +28,13 @@ ln -s "${ROOT}/shared/reports" "shared/reports"
 
 # create symlink to shared vendor/bundle so we don't repeat gem installs when not needed:
 ln -s "${ROOT}/shared/bundled_gems" "vendor/bundle"
-# bundle install to shared vendor/bundle ignoring assets+development+test groups:
-bundle install --deployment --without assets development test
 
-bundle exec rake db:migrate
-bundle exec rake db:seed
-bundle exec rake assets:precompile
+# cls: Nov 2013: do the following by hand:
+# bundle install to shared vendor/bundle ignoring assets+development+test groups:
+# bundle install --deployment --without assets development test
+# bundle exec rake db:migrate
+# bundle exec rake db:seed
+# bundle exec rake assets:precompile
 
 # "start'em up da shield", i.e. start the app server using the Upstart service created via Foreman/Procfile:
 # sudo service oscollect start

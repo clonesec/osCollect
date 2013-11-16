@@ -10,10 +10,6 @@ jQuery ->
 
   $('.datepicker').datepicker()
 
-  # $("#search_sources").select2
-  #   placeholder: "match any of the selected log sources"
-  #   allowClear: true
-
   $('#search form').nestedFields()
 
   # cls: this is old jquery:

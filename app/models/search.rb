@@ -157,21 +157,6 @@ class Search < ActiveRecord::Base
     return total, facet_items
   end
 
-  # def group_by_results
-  #   @group_by_total = 0
-  #   groupbys = []
-  #   self.sentinels.each do |sentinel|
-  #     unless sentinel[1].response.blank?
-  #       if sentinel[1].response.code == 200
-  #         body = JSON.parse(sentinel[1].response.body)
-  #         @group_by_total += body['count']
-  #         body['results'].each { |result| groupbys << result }
-  #       end
-  #     end
-  #   end
-  #   groupbys
-  # end
-
   def perform(excluded_host_ips, rows=50)
     solr = RSolr.connect url: APP_CONFIG[:solr_url]
     # 1. allow user to set "rows" in their profile: [50, 100, 500, 1000]
